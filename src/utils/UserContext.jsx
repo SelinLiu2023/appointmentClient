@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 export const UserContext = createContext();
 
@@ -24,6 +24,10 @@ function reducer(state, action) {
 
 export const UserContextProvider = ({children})=>{
     const [userInfo, userInfoDispatch] = useReducer(reducer, initUserInfo);
+
+    useEffect(()=>{
+        console.log(userInfo)
+    }, [userInfo]);
     return (
         <UserContext.Provider value={{userInfo, userInfoDispatch}}>
             {children}

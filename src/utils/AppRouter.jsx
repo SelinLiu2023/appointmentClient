@@ -5,7 +5,8 @@ import { LoginPage } from "../pages/LoginPage";
 import { RegistrationPage } from "../pages/RegistrationPage";
 import { SingleInvitationPage } from "../pages/SingleInvitationPage";
 import { MainPage } from "../pages/MainPage";
-import { AuthGuard } from "../pages/AuthGuardPage";
+import { AuthGuardPage } from "../pages/AuthGuardPage";
+import { CreateNewAppointmentPage } from "../pages/CreateNewAppointmentPage";
 
 export const AppRouter = createBrowserRouter([
     {
@@ -18,11 +19,22 @@ export const AppRouter = createBrowserRouter([
         children: [
             {
                 element: (
-                    <AuthGuard>
-                        <MainPage />
-                    </AuthGuard>
+                    <AuthGuardPage />
                 ),
-                path: "main",
+                children: [
+                    {
+                        element: (
+                            <CreateNewAppointmentPage />
+                        ),
+                        path: "newappointment",
+                    },
+                    {
+                        element: (
+                            <MainPage />
+                        ),
+                        path: "main",
+                    },                
+                ]
             },
         ]
     },
