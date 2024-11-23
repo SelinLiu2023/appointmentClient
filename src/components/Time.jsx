@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../styles.css";
-import { GoArrowRight } from "react-icons/go";
-import { GoArrowLeft } from "react-icons/go";
-export const Time = ({newAppointment, setNewAppointment, setStepCompleted})=>{
+import { NewAppointmentContext } from "../utils/NewAppointmentContext";
+export const Time = ({newAppointment, setNewAppointment})=>{
+    const {appointment, setAppointment} = useContext(NewAppointmentContext);
+    const {gotoNextStep} = appointment;
     const [warning, setWarning] = useState("");
     const handleInputTilteChange = (e)=>{
         setNewAppointment({
@@ -20,30 +21,40 @@ export const Time = ({newAppointment, setNewAppointment, setStepCompleted})=>{
                 [inputName]: e.currentTarget.value
             }
             );
-        // if(inputName === "startTime"){
-        //     if(selectedDate < today){
-        //         console.log("startTime",e.currentTarget.value);
-        //         setWarning("This date is already gone.")
-        //     }else if(selectedDate > newAppointment.endTime){
-        //         setWarning("The end time should later as start time.")
-        //     }
-        // }
-        // if(inputName === "endTime"){
-        //         if(selectedDate < newAppointment.startTime){
-        //             setWarning("The end time should later as start time.")
-        //         }
-        // }
     };
     useEffect(()=>{
-        const today = new Date();
-        const startDate = new Date(newAppointment.startTime);
-        const endDate = new Date(newAppointment.endTime);
-        if(startDate < today || startDate > endDate){
-            setWarning("Please input valid date.")
-        }else{
-            setStepCompleted(true);
+            setAppointment(prev=>(
+                {
+                    ...prev,
+                    gotoNextStep:false,
+                }
+            ));
+    },[]);
+    useEffect(()=>{
+        if(gotoNextStep=== true){
+            const today = new Date();
+            const startDate = new Date(newAppointment.startTime);
+            const endDate = new Date(newAppointment.endTime);
+            if(isNaN(startDate) || isNaN(endDate) ||startDate < today || startDate > endDate){
+                setWarning("Please input valid date.")
+                setAppointment(prev=>(
+                    {
+                        ...prev,
+                        isStepCompleted: false,
+                        gotoNextStep: false,
+                    }
+                ));
+            }else{
+                setAppointment(prev=>(
+                    {
+                        ...prev,
+                        isStepCompleted: true,
+                    }
+                ));
+            }
         }
-    },[newAppointment]);
+    },[gotoNextStep]);
+
     return (
         <div>
             <label htmlFor="title"

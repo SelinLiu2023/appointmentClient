@@ -1,10 +1,46 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ProcessBar } from './ProcessBar';
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
+import { NewAppointmentContext } from '../utils/NewAppointmentContext';
 
-export const Modal = ({ isOpen, closeModel, step, totalSteps,setNextStep, setPrevStep, isStepCompleted, children }) => {
-    if (!isOpen) return null;
+export const Modal = ({children }) => {
+    const {appointment, setAppointment} = useContext(NewAppointmentContext);
+    const {isStepCompleted, totalSteps, step, isModalOpen} = appointment;
+    if (!isModalOpen) return null;
+
+    const setNextStep = ()=>{
+        console.log("click", isStepCompleted)
+        setAppointment(prev=>(
+            {
+                ...prev,
+                gotoNextStep: true,
+            }
+        ));
+        if(!isStepCompleted) return;
+        setAppointment(prev=>(
+            {
+                ...prev,
+                step : prev.step + 1,
+            }
+        ));
+    };
+    const setPrevStep = ()=>{
+        setAppointment(prev=>(
+            {
+                ...prev,
+                step : prev.step - 1,
+            }
+        ));
+    };
+    const closeModel= ()=>{
+        setAppointment(prev=>(
+            {
+                ...prev,
+                isModalOpen : false,
+            }
+        ));
+    }
     return (
         <div className='w-screen h-screen fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 flex-col'>
 
@@ -16,8 +52,9 @@ export const Modal = ({ isOpen, closeModel, step, totalSteps,setNextStep, setPre
                 className="absolute top-3 right-3 text-gray-400 hover:text-black">
                     X
                 </button>
-
+                <div  className="overflow-auto">
                 {children}
+                </div>
 
                 <button onClick={setPrevStep} 
                 disabled={step <= 1} className='absolute left-2 text-gray-700 hover:text-gray-700 hover:border-b hover:border-b-gray-700 hover:border-b-[1px] transition-all duration-200 disabled:cursor-default disabled:text-gray-400 disabled:hover:text-gray-400 disabled:hover:border-none'>
@@ -25,7 +62,7 @@ export const Modal = ({ isOpen, closeModel, step, totalSteps,setNextStep, setPre
                 </button>
 
                 <button onClick={setNextStep} 
-                disabled={step >= totalSteps || !isStepCompleted} 
+                disabled={step >= totalSteps} 
                 className="absolute right-2 text-gray-700 hover:text-gray-700 hover:border-b hover:border-b-gray-700 hover:border-b-[1px] transition-all duration-200 disabled:cursor-default disabled:text-gray-400 disabled:hover:text-gray-400 disabled:hover:border-none">
                     <GoArrowRight />
                 </button>
