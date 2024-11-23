@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { UserContext } from "../utils/UserContext";
 import { useContext, useState ,useRef, useEffect} from "react";
 
@@ -13,8 +13,8 @@ export const LayoutPage = ()=>{
         const handleClickOutside = (event) => {
             // 如果点击区域不在菜单或按钮内，关闭菜单
             if (
-                menuRef.current &&
-                !menuRef.current.contains(event.target) &&
+                // menuRef.current &&
+                // !menuRef.current.contains(event.target) &&
                 buttonRef.current &&
                 !buttonRef.current.contains(event.target)
             ) {
@@ -64,13 +64,14 @@ export const LayoutPage = ()=>{
                     isOpen ? "max-h-40" : "max-h-0"}`}
             >
                 <ul className="flex flex-col p-2">
-                    <li className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Home</li>
+                    <NavLink to={"/groups"}
+                    className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Meine Gruppe</NavLink>
                     <li className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">About</li>
                     <li className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Contact</li>
                 </ul>
             </div>
             </header>
-            <main>
+            <main className="pt-12 flex flex-col justify-center items-center">
                 <Outlet></Outlet>
             </main>
         </div>

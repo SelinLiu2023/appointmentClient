@@ -1,25 +1,20 @@
 import { useContext, useEffect } from "react";
 import "../styles.css";
 import { NewAppointmentContext } from "../utils/NewAppointmentContext";
-export const Address = ({newAppointment, setNewAppointment})=>{
-    const {appointment, setAppointment} = useContext(NewAppointmentContext);
-    const {gotoNextStep} = appointment;
-    useEffect(()=>{
-            setAppointment(prev=>(
-                {
-                    ...prev,
-                    gotoNextStep:false,
-                }
-            ));
-    },[]);
+export const Address = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep})=>{
+    // useEffect(()=>{
+    //         setAppointment(prev=>(
+    //             {
+    //                 ...prev,
+    //                 gotoNextStep:false,
+    //                 isStepCompleted: false,
+    //             }
+    //         ));
+    // },[]);
     useEffect(()=>{
         if(gotoNextStep=== true){
-            setAppointment(prev=>(
-                {
-                    ...prev,
-                    isStepCompleted: true,
-                }
-            ));
+            setStepCompleted(true);
+            setGotoNextStep(false);
         }
     },[gotoNextStep]);
     return (

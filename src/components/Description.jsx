@@ -1,7 +1,14 @@
 import "../styles.css";
-
-export const Description = ({newAppointment, setNewAppointment})=>{
+import { useContext, useEffect } from "react";
+export const Description = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep})=>{
+    useEffect(()=>{
+        if(gotoNextStep=== true){
+            setStepCompleted(true);
+            setGotoNextStep(false);
+        }
+    },[gotoNextStep]);
     return (
+        
         <div>
              <label htmlFor="description"
                 className='p-2 m-2 w-[320px] text-left text-gray-700'>

@@ -5,30 +5,17 @@ import { UnregisteredGastName } from "./UnregisteredGastName";
 import { RegisteredGast } from "./RegisteredGast";
 import { UserListItem } from "./UserListItem";
 
-export const Gasts = ({newAppointment, setNewAppointment})=>{
-    const {appointment, setAppointment} = useContext(NewAppointmentContext);
-    const {gotoNextStep} = appointment;
-    const [showInputGastName, setShowInputGastName] = useState(false);
-    const [showGastGroups, setShowGastGroups] = useState(false);
+export const Gasts = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep})=>{
+    // const [showInputGastName, setShowInputGastName] = useState(false);
+    // const [showGastGroups, setShowGastGroups] = useState(false);
     const [showRegiesterUsers, setShowRegiesterUsers] = useState(false);
-    const [unregisteredGastsList, setUnregisteredGastsList] = useState([{}]);
-    console.log("Gast", newAppointment.gasts)
-    useEffect(()=>{
-            setAppointment(prev=>(
-                {
-                    ...prev,
-                    gotoNextStep:false,
-                }
-            ));
-    },[]);
+    // const [unregisteredGastsList, setUnregisteredGastsList] = useState([{}]);
+    // console.log("Gast", newAppointment.gasts)
+
     useEffect(()=>{
         if(gotoNextStep=== true){
-            setAppointment(prev=>(
-                {
-                    ...prev,
-                    isStepCompleted: true,
-                }
-            ));
+            setStepCompleted(true);
+            setGotoNextStep(false);
         }
     },[gotoNextStep]);
 

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import "../styles.css";
 import { NewAppointmentContext } from "../utils/NewAppointmentContext";
-export const Time = ({newAppointment, setNewAppointment})=>{
-    const {appointment, setAppointment} = useContext(NewAppointmentContext);
-    const {gotoNextStep} = appointment;
+
+
+export const Time = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep})=>{
     const [warning, setWarning] = useState("");
     const handleInputTilteChange = (e)=>{
         setNewAppointment({
@@ -22,35 +22,30 @@ export const Time = ({newAppointment, setNewAppointment})=>{
             }
             );
     };
-    useEffect(()=>{
-            setAppointment(prev=>(
-                {
-                    ...prev,
-                    gotoNextStep:false,
-                }
-            ));
-    },[]);
+    // useEffect(()=>{
+    //         setAppointment(prev=>(
+    //             {
+    //                 ...prev,
+    //                 gotoNextStep:false,
+    //                 isStepCompleted: false,
+    //             }
+    //         ));
+    // },[]);
     useEffect(()=>{
         if(gotoNextStep=== true){
             const today = new Date();
             const startDate = new Date(newAppointment.startTime);
             const endDate = new Date(newAppointment.endTime);
-            if(isNaN(startDate) || isNaN(endDate) ||startDate < today || startDate > endDate){
+            if(isNaN(startDate) || isNaN(endDate) ||startDate < today || startDate >= endDate){
                 setWarning("Please input valid date.")
-                setAppointment(prev=>(
-                    {
-                        ...prev,
-                        isStepCompleted: false,
-                        gotoNextStep: false,
-                    }
-                ));
+                console.log("wrong time")
+                setStepCompleted(false);
+                setGotoNextStep(false);
+
             }else{
-                setAppointment(prev=>(
-                    {
-                        ...prev,
-                        isStepCompleted: true,
-                    }
-                ));
+                console.log("correct time")
+                setStepCompleted(true);
+                setGotoNextStep(false);
             }
         }
     },[gotoNextStep]);

@@ -4,7 +4,7 @@ export const NewAppointmentContext = createContext();
 const initState = {
         step: 1,
         totalSteps: 4,
-        isStepCompleted : true,
+        isStepCompleted : false,
         gotoNextStep: false,
         isModalOpen: true,
 };
@@ -17,8 +17,10 @@ export const NewAppointmentContextProvider = ({children})=>{
     const contextValue = useMemo(() => ({ appointment, setAppointment,initNewAppointmentContext }),
     [appointment]);
     useEffect(()=>{
-        console.log("appointment", appointment)
-    }, [appointment.isModalOpen]);
+        console.log("isStepCompleted", appointment.isStepCompleted)
+        console.log("step", appointment.step)
+
+    }, [appointment.isStepCompleted]);
     return(
         <NewAppointmentContext.Provider value={contextValue}>
             {children}
