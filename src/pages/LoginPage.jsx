@@ -30,7 +30,8 @@ export const LoginPage = ()=>{
                 // 假设后端返回 { userName: "JohnDoe", token: "jwt-token" }
 
                 // 更新全局状态
-                userInfoDispatch({ type: 'SET_LOGIN', payload: data.userName });
+                console.log("login", data);
+                userInfoDispatch({ type: 'SET_LOGIN', payload: {userName: data.userName, id:data.id }});
                 navigator("/main");
                 // console.log("login response returned", data)
 
@@ -41,7 +42,6 @@ export const LoginPage = ()=>{
             }
         } catch (error) {
             console.error('登录请求失败:', error);
-            alert('无法连接到服务器');
         }
     };
     return (

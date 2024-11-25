@@ -5,6 +5,7 @@ import { UserListItem } from "./UserListItem";
 import { FcCheckmark } from "react-icons/fc";
 import { FcPlus } from "react-icons/fc";
 import { TaskListItem } from "./TaskListItem";
+import { postNewEvent } from "../utils/fetch.js";
 
 export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps})=>{
     // const [showInputGastName, setShowInputGastName] = useState(false);
@@ -58,6 +59,11 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
             setTaskPerformerCount(editTask.performerCount);
         }
     },[editTask]);
+    const handleAddEvent = async()=>{
+        console.log("handleAddEvent");
+        const response = await postNewEvent(newAppointment);
+ 
+    }
     return (
         <div className="flex flex-col justify-center">
             <div className="flex flex-col justify-center">
@@ -108,7 +114,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                     className='text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-[#2D4B73]'/>
                 </div>
 
-       {totalSteps === 6 && <button className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
+       {totalSteps === 6 && <button onClick={handleAddEvent} className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
         </div>
     );
 };

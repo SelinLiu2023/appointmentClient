@@ -12,7 +12,8 @@ function reducer(state, action) {
         case 'SET_LOGIN':
             return {
                 ...state,
-                userName: action.payload,
+                userName: action.payload.userName,
+                id: action.payload.id,
                 isLogedin: true 
             };
                 

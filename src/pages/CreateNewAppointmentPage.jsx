@@ -18,7 +18,7 @@ export const CreateNewAppointmentPage = () => {
     const [step, setStep] = useState(1);
     const [totalSteps, setTotalSteps] = useState(6);
     const initState = {
-        createdBy : userInfo.userName,
+        createdBy : userInfo.id,
         title: "",
         type: "",
         contact: "",
