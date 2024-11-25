@@ -1,24 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import "../styles.css";
-import { NewAppointmentContext } from "../utils/NewAppointmentContext";
 
 
 export const Time = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep})=>{
     const [warning, setWarning] = useState("");
-    const handleInputTilteChange = (e)=>{
-        setNewAppointment({
-            ...newAppointment,
-            title:e.currentTarget.value
-        });
-    }
+    // const handleInputTilteChange = (e)=>{
+    //     const { value } = e.currentTarget;
+
+    //     setNewAppointment({
+    //         ...newAppointment,
+    //         title:value
+    //     });
+    // }
     const handleInputTimeChange = (e)=>{
         setWarning("");
 
-        const inputName = e.currentTarget.name;
+        const { name } = e.currentTarget;
+        const { value } = e.currentTarget;
+
         setNewAppointment(
             {
                 ...newAppointment,
-                [inputName]: e.currentTarget.value
+                [name]: value
             }
             );
     };
@@ -38,12 +41,10 @@ export const Time = ({newAppointment, setNewAppointment,gotoNextStep,setStepComp
             const endDate = new Date(newAppointment.endTime);
             if(isNaN(startDate) || isNaN(endDate) ||startDate < today || startDate >= endDate){
                 setWarning("Please input valid date.")
-                console.log("wrong time")
                 setStepCompleted(false);
                 setGotoNextStep(false);
 
             }else{
-                console.log("correct time")
                 setStepCompleted(true);
                 setGotoNextStep(false);
             }
@@ -52,7 +53,7 @@ export const Time = ({newAppointment, setNewAppointment,gotoNextStep,setStepComp
 
     return (
         <div>
-            <label htmlFor="title"
+            {/* <label htmlFor="title"
                 className='p-2 m-2 w-[320px] text-left text-gray-700'>
                     <p>Appointment title</p>
             </label>
@@ -63,10 +64,11 @@ export const Time = ({newAppointment, setNewAppointment,gotoNextStep,setStepComp
                     placeholder="Your apointment's title"
                     required
                     onChange={handleInputTilteChange}/>
+            */}
             <label htmlFor="startTime"
                 className='p-2 m-2 w-[320px] text-left text-gray-700'>
                     <p>Start at : </p>
-            </label>
+            </label> 
             <input className='text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-b border-[#2D4B73]'
                     name="startTime"
                     type="datetime-local"

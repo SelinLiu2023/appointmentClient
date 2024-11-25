@@ -1,22 +1,20 @@
 import { useContext, useEffect } from "react";
 import "../styles.css";
-import { NewAppointmentContext } from "../utils/NewAppointmentContext";
 export const Address = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep})=>{
-    // useEffect(()=>{
-    //         setAppointment(prev=>(
-    //             {
-    //                 ...prev,
-    //                 gotoNextStep:false,
-    //                 isStepCompleted: false,
-    //             }
-    //         ));
-    // },[]);
     useEffect(()=>{
         if(gotoNextStep=== true){
             setStepCompleted(true);
             setGotoNextStep(false);
         }
     },[gotoNextStep]);
+    const handleChange = (e)=>{
+        const { value } = e.currentTarget;
+
+        setNewAppointment(prev=>({
+            ...prev,
+            address : value,
+        }));
+    };
     return (
         <div>
              <label htmlFor="title"
@@ -28,10 +26,7 @@ export const Address = ({newAppointment, setNewAppointment,gotoNextStep,setStepC
                     type="text"
                     value={newAppointment.address}
                     placeholder="Your apointment's address"
-                    required
-                    onChange={e=>setNewAppointment(e.currentTarget.value)}/>
-
-   
+                    onChange={handleChange}/>
         </div>
     );
 };

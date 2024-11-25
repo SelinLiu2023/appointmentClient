@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "../styles.css";
-import { ComfirmInvitation } from "./ComfirmInvitation";
 import { FcSearch } from "react-icons/fc";
 import { fetchSearch } from "../utils/fetch";
 import { UserListItem } from "./UserListItem";

@@ -7,7 +7,6 @@ import { SingleInvitationPage } from "../pages/SingleInvitationPage";
 import { MainPage } from "../pages/MainPage";
 import { AuthGuardPage } from "../pages/AuthGuardPage";
 import { CreateNewAppointmentPage } from "../pages/CreateNewAppointmentPage";
-import { NewAppointmentContextProvider } from "./NewAppointmentContext";
 import { GroupsPage } from "../pages/GroupsPage";
 
 export const AppRouter = createBrowserRouter([
@@ -26,9 +25,7 @@ export const AppRouter = createBrowserRouter([
                 children: [
                     {
                         element: (
-                            <NewAppointmentContextProvider>
                             <CreateNewAppointmentPage />
-                            </NewAppointmentContextProvider>
                         ),
                         path: "newappointment",
                     },

@@ -7,18 +7,20 @@ import { Address } from "../components/Address";
 import { Description } from "../components/Description";
 import { Gasts } from "../components/Gasts";
 import { UserContext } from "../utils/UserContext";
-import { NewAppointmentContext } from "../utils/NewAppointmentContext";
 import { useNavigate } from "react-router-dom";
+import { Title } from '../components/Title';
+import { Tasks } from '../components/Tasks';
 
 export const CreateNewAppointmentPage = () => {
     const {userInfo} = useContext(UserContext);
     const [gotoNextStep, setGotoNextStep] = useState(false);
     const [isStepCompleted, setStepCompleted] = useState(false);
     const [step, setStep] = useState(1);
-    const totalSteps = 4;
+    const [totalSteps, setTotalSteps] = useState(6);
     const initState = {
         createdBy : userInfo.userName,
         title: "",
+        type: "",
         contact: "",
         startTime: "",
         endTime: "",
@@ -29,20 +31,31 @@ export const CreateNewAppointmentPage = () => {
             title: "",
             wishesList: []
         },
+        tasks:[],
     };
+ 
     const [newAppointment, setNewAppointment] = useState(initState);
     const navigator = useNavigate();
 
     useEffect(()=>{
-        console.log(newAppointment);
+        console.log("newAppointment", newAppointment);
     }, [newAppointment]);
+    useEffect(()=>{
+        console.log("step",step);
+    }, [step]);
     useEffect(()=>{
         if(isStepCompleted===true){
             setStep(prev=>prev + 1);
             setStepCompleted(false);
         }
     },[isStepCompleted]);
-
+    useEffect(()=>{
+        if(newAppointment.type==="generalEvent"){
+            setTotalSteps(5);
+        }else{
+            setTotalSteps(6);
+        }
+    },[newAppointment.type]);
     const setNextStep = ()=>{
         setGotoNextStep(true);
     };
@@ -68,14 +81,15 @@ export const CreateNewAppointmentPage = () => {
                 <div  className="overflow-auto">
 
 
-                    
-                    {step === 1 && <Time newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Time>}
-                    
-                    {step === 2 &&    <Address newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Address>}
+                    {step === 1 && <Title newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Title>}
 
-                    { step === 3 &&      <Description newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Description>}
-                    { step === 4 &&     <Gasts newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Gasts>}
+                    {step === 2 && <Time newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Time>}
+                    
+                    {step === 3 &&    <Address newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Address>}
 
+                    { step === 4 &&      <Description newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Description>}
+                    { step === 5 &&     <Gasts newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep} totalSteps={totalSteps}></Gasts>}
+                    { step === 6 &&     <Tasks newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep} totalSteps={totalSteps}></Tasks>}
                 </div>
 
                 <button onClick={setPrevStep} 

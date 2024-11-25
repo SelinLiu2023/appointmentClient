@@ -7,6 +7,14 @@ export const Description = ({newAppointment, setNewAppointment,gotoNextStep,setS
             setGotoNextStep(false);
         }
     },[gotoNextStep]);
+    const handleChange = (e)=>{
+        const { value } = e.currentTarget;
+
+        setNewAppointment(prev=>({
+            ...prev,
+            description : value,
+        }));
+    };
     return (
         
         <div>
@@ -20,7 +28,7 @@ export const Description = ({newAppointment, setNewAppointment,gotoNextStep,setS
                     value={newAppointment.description}
                     placeholder="Your apointment's description"
                     required
-                    onChange={e=>setNewAppointment(e.currentTarget.value)}/>
+                    onChange={handleChange}/>
 
    
         </div>

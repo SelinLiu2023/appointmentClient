@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "../styles.css";
-import { ComfirmInvitation } from "./ComfirmInvitation";
 
 export const UnregisteredGastName = ({setUnregisteredGastsList})=>{
     const [clicked, setClicked] = useState(false);
@@ -31,7 +30,7 @@ export const UnregisteredGastName = ({setUnregisteredGastsList})=>{
                     placeholder="Gast Namen"
                     required
                     onChange={e=>setNameInput(e.currentTarget.value)}/>
-            <ComfirmInvitation clicked={clicked} handleClick={handleClick}></ComfirmInvitation>
+            {/* <ComfirmInvitation clicked={clicked} handleClick={handleClick}></ComfirmInvitation> */}
         </div>
     );
 };
