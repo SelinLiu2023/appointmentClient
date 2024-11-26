@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+
 const RESULT_LIST_LIMIT = 10;
 const SERVER_URL = "http://localhost:3000";
 export const fetchSearch = async (keywords)=>{
@@ -25,20 +28,20 @@ export const fetchSearch = async (keywords)=>{
 export const postNewEvent = async (newAppointment)=>{
     try {
         // 发送 POST 请求到登录 API
-        const gasts = newAppointment.gasts.map(gast=>gast._id);
-        console.log("gasts",gasts);
-        const data = {
-            ...newAppointment,
-            gasts: [...gasts]
-        };
-        console.log("data",data);
+        // const gasts = newAppointment.gasts.map(gast=>{_id:gast._id, userName:gast.userName});
+        // console.log("gasts",gasts);
+        // const data = {
+        //     ...newAppointment,
+        //     gasts: [...gasts]
+        // };
+        // console.log("data",data);
 
         const response = await fetch('http://localhost:3000/event', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(newAppointment),
         });
         if (response.ok) {
             const data = await response.json();
@@ -58,6 +61,45 @@ export const postNewEvent = async (newAppointment)=>{
 
     } catch (error) {
         
+    }
+
+}
+
+export const getEvents = async (ids, userId)=>{
+
+    try {
+        if(!userId) return;
+        console.log("getEvents ids",ids)
+        console.log("getEvents userId",userId)
+        const response = await fetch(`${SERVER_URL}/api/files/query`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ids: ids,
+                userId: userId,
+                // conditions: { status: "active" }
+            }),
+        });
+        console.log("getEvents response", response);
+        if (response.ok) {
+            const data = await response.json();
+            // 假设后端返回 { userName: "JohnDoe", token: "jwt-token" }
+            console.log("get event response",data)
+            // 更新全局状态
+            // userInfoDispatch({ type: 'SET_LOGIN', payload: data.userName });
+            // navigator("/main");
+            // console.log("login response returned", data)
+            return data;
+
+        } else {
+            const error = await response.json();
+            console.log("get event fail",error.message)
+        }
+
+    } catch (error) {
+        console.log("getEvents, error", error)
     }
 
 }

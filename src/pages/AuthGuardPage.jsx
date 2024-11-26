@@ -9,7 +9,7 @@ export const AuthGuardPage = () => {
     console.log("userInfo", userInfo);
     // 如果用户未登录，导航到 HomePage
     if (!isLogedin) {
-        return <Navigate to="/login" replace/>;
+        // return <Navigate to="/login" replace/>;
     }
 
     // 如果已登录，渲染子组件

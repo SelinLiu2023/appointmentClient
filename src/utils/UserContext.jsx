@@ -16,7 +16,10 @@ function reducer(state, action) {
                 id: action.payload.id,
                 isLogedin: true 
             };
-                
+        case "RESTORE_FROM_LOCALSTORAGE":
+            return {
+                ...action.payload
+            };
         default:
             return state;
     }
@@ -27,9 +30,25 @@ export const UserContextProvider = ({children})=>{
     const [userInfo, userInfoDispatch] = useReducer(reducer, initUserInfo);
     const contextValue = useMemo(() => ({ userInfo, userInfoDispatch }),
                                 [userInfo]);
+
     useEffect(()=>{
-        console.log(userInfo)
+        const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if(storedUserInfo){
+            userInfoDispatch({type: "RESTORE_FROM_LOCALSTORAGE", payload: storedUserInfo});
+        }
+    },[]);
+    useEffect(()=>{
+        if(userInfo.isLogedin){
+            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+            console.log("localStorage",userInfo);
+
+        }else{
+            localStorage.removeItem("userInfo");
+            console.log("localStorage userInfo removed")
+        }
+
     }, [userInfo]);
+    
     return (
         <UserContext.Provider value={contextValue}>
             {children}

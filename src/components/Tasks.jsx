@@ -6,6 +6,7 @@ import { FcCheckmark } from "react-icons/fc";
 import { FcPlus } from "react-icons/fc";
 import { TaskListItem } from "./TaskListItem";
 import { postNewEvent } from "../utils/fetch.js";
+import { useNavigate } from "react-router-dom";
 
 export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps})=>{
     // const [showInputGastName, setShowInputGastName] = useState(false);
@@ -14,7 +15,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
     const [taskDescription, setTaskDescription] = useState("");
     const [taskPerformerCount, setTaskPerformerCount] = useState(0);
     const [editTask, setEditTask] = useState(null);
-
+    const navigator = useNavigate();
     // const [unregisteredGastsList, setUnregisteredGastsList] = useState([{}]);
     // console.log("Gast", newAppointment.gasts)
     const [clicked, setClicked] = useState(false);
@@ -61,8 +62,9 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
     },[editTask]);
     const handleAddEvent = async()=>{
         console.log("handleAddEvent");
-        const response = await postNewEvent(newAppointment);
- 
+        const newEventId = await postNewEvent(newAppointment);
+        console.log("event response", newEventId)
+        navigator(`/event/${newEventId}`);
     }
     return (
         <div className="flex flex-col justify-center">

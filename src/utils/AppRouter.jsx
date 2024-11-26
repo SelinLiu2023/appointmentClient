@@ -8,6 +8,7 @@ import { MainPage } from "../pages/MainPage";
 import { AuthGuardPage } from "../pages/AuthGuardPage";
 import { CreateNewAppointmentPage } from "../pages/CreateNewAppointmentPage";
 import { GroupsPage } from "../pages/GroupsPage";
+import { SingleCreatedEvent } from "../pages/SingleCreatedEvent";
 
 export const AppRouter = createBrowserRouter([
     {
@@ -34,7 +35,13 @@ export const AppRouter = createBrowserRouter([
                             <MainPage />
                         ),
                         path: "main",
-                    },   
+                    },  
+                    {
+                        element: (
+                            <SingleCreatedEvent />
+                        ),
+                        path: "event/:id",
+                    }, 
                     {
                         element: (
                             <GroupsPage />
