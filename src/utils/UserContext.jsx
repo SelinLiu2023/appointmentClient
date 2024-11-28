@@ -12,8 +12,7 @@ function reducer(state, action) {
         case 'SET_LOGIN':
             return {
                 ...state,
-                userName: action.payload.userName,
-                id: action.payload.id,
+                ...action.payload,
                 isLogedin: true 
             };
         case "RESTORE_FROM_LOCALSTORAGE":

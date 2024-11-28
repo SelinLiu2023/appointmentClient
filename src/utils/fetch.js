@@ -65,11 +65,11 @@ export const postNewEvent = async (newAppointment)=>{
 
 }
 
-export const getEvents = async (ids, userId)=>{
+export const getEvent = async (id, userId)=>{
 
     try {
         if(!userId) return;
-        console.log("getEvents ids",ids)
+        console.log("getEvents id",id)
         console.log("getEvents userId",userId)
         const response = await fetch(`${SERVER_URL}/api/files/query`, {
             method: 'POST',
@@ -77,7 +77,7 @@ export const getEvents = async (ids, userId)=>{
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                ids: ids,
+                id: id,
                 userId: userId,
                 // conditions: { status: "active" }
             }),

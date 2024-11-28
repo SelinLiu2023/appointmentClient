@@ -39,6 +39,8 @@ export const Time = ({newAppointment, setNewAppointment,gotoNextStep,setStepComp
             const today = new Date();
             const startDate = new Date(newAppointment.startTime);
             const endDate = new Date(newAppointment.endTime);
+            console.log("startDate",startDate)
+            console.log("endDate",endDate)
             if(isNaN(startDate) || isNaN(endDate) ||startDate < today || startDate >= endDate){
                 setWarning("Please input valid date.")
                 setStepCompleted(false);

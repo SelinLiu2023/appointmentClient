@@ -10,7 +10,10 @@ export const UserListItem = ({user, setNewAppointment, confirmed})=>{
                 ...prev,
                 gasts: [
                     ...prev.gasts,
-                    user,
+                    {
+                        ...user,
+                        isJoinIn: false
+                    },
                 ]
             }));
         }else{

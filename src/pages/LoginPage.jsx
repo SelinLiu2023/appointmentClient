@@ -31,7 +31,7 @@ export const LoginPage = ()=>{
 
                 // 更新全局状态
                 console.log("login", data);
-                userInfoDispatch({ type: 'SET_LOGIN', payload: {userName: data.userName, id:data.id }});
+                userInfoDispatch({ type: 'SET_LOGIN', payload: data});
                 navigator("/main");
                 // console.log("login response returned", data)
 
