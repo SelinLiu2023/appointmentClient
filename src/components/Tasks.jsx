@@ -7,6 +7,7 @@ import { FcPlus } from "react-icons/fc";
 import { TaskListItem } from "./TaskListItem";
 import { postNewEvent } from "../utils/fetch.js";
 import { useNavigate } from "react-router-dom";
+import {v4 as uuid} from "uuid";
 
 export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps})=>{
     // const [showInputGastName, setShowInputGastName] = useState(false);
@@ -36,7 +37,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                 tasks: [
                     ...prev.tasks,
                     {
-                        // id: prev.tasks.length,
+                        id: uuid(),
                         title: taskTitle,
                         description: taskDescription,
                         performerCount : taskPerformerCount,
@@ -74,7 +75,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                     {
                     (newAppointment.tasks.length !== 0 ) && 
                     newAppointment.tasks.map((task)=>(
-                        <TaskListItem key={task.title} task={task} setNewAppointment={setNewAppointment} setEditTask={setEditTask} className="text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-b border-[#2D4B73]"></TaskListItem>
+                        <TaskListItem key={task.id} task={task} setNewAppointment={setNewAppointment} setEditTask={setEditTask} className="text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-b border-[#2D4B73]"></TaskListItem>
                     ))
                     }
                 </div>            

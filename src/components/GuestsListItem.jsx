@@ -1,8 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FcCheckmark } from "react-icons/fc";
+import { UserContext } from "../utils/UserContext";
 
-export const UserListItem = ({user, setNewAppointment, confirmed})=>{
+export const UserListItem = ({event, setEvent})=>{
+    const {userInfo} = useContext(UserContext);
     const [clicked, setClicked] = useState(confirmed);
+    const {_id} = userInfo;
+    const [getInvited, setInvited] = useState(false);
+    if(event.gasts.find(guest=>guest._id === _id)){
+        setInvited(true);
+    }
+    
     const handleComfirm = ()=>{
         setClicked(prev=>!prev);
         if(!clicked){
@@ -36,10 +44,16 @@ export const UserListItem = ({user, setNewAppointment, confirmed})=>{
             <p className='text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-b border-[#2D4B73]'>
                 {user.userName}
             </p>
-  
-            <div onClick={handleComfirm} className="border-[1px] w-[15px] h-[15px] border-gray-400 flex items-center justify-center hover:cursor-pointer hover:border-blue-500">
-            {clicked && <FcCheckmark />}
+            { setInvited &&
+            <div>
+                <button onClick={handleComfirm} className="bg-[#99B4BF] w-[50px]">
+                Ablehnen
+                </button>
+                <button onClick={handleComfirm} className="bg-[#99B4BF] w-[50px]">
+                Annehmen
+                </button>
             </div>
+            }
         </div>
     );
 };

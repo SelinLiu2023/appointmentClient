@@ -1,12 +1,13 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../utils/UserContext";
 import { useContext, useState ,useRef, useEffect} from "react";
 
 export const LayoutPage = ()=>{
-    const {userInfo} = useContext(UserContext);
+    const {userInfo, userInfoDispatch} = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null); // 引用菜单区域
     const buttonRef = useRef(null); // 引用按钮
+    const navigator = useNavigate();
 
     // 点击外部区域时关闭菜单
     useEffect(() => {
@@ -30,6 +31,10 @@ export const LayoutPage = ()=>{
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
+    const handleLogout=()=>{
+        userInfoDispatch({ type: 'SET_LOGOUT'});
+        navigator("/");
+    }
     return (
         <div>
             <header className="relative flex flex-row p-2 justify-center items-center bg-[#99B4BF]">
@@ -67,7 +72,7 @@ export const LayoutPage = ()=>{
                     <NavLink to={"/groups"}
                     className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Meine Gruppe</NavLink>
                     <li className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">About</li>
-                    <li className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Contact</li>
+                    <li onClick={handleLogout} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Log out</li>
                 </ul>
             </div>
             </header>

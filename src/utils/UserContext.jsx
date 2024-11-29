@@ -8,12 +8,18 @@ const initUserInfo = {
 
 }
 function reducer(state, action) {
+    console.log("userInfo reducer payload", action.payload)
     switch (action.type) {
         case 'SET_LOGIN':
             return {
                 ...state,
                 ...action.payload,
                 isLogedin: true 
+            };
+        case 'SET_LOGOUT':
+            return {
+                ...state,
+                isLogedin: false 
             };
         case "RESTORE_FROM_LOCALSTORAGE":
             return {
@@ -31,19 +37,21 @@ export const UserContextProvider = ({children})=>{
                                 [userInfo]);
 
     useEffect(()=>{
-        const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
-        if(storedUserInfo){
+        const localStorageItem = localStorage.getItem("userInfo");
+        if(localStorageItem){
+            const storedUserInfo = JSON.parse(localStorageItem);
             userInfoDispatch({type: "RESTORE_FROM_LOCALSTORAGE", payload: storedUserInfo});
         }
+
     },[]);
     useEffect(()=>{
+        console.log("localStorage userInfo ", userInfo)
         if(userInfo.isLogedin){
+            // localStorage.removeItem("userInfo");
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            console.log("localStorage",userInfo);
 
         }else{
             localStorage.removeItem("userInfo");
-            console.log("localStorage userInfo removed")
         }
 
     }, [userInfo]);

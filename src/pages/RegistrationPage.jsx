@@ -33,13 +33,15 @@ export const RegistrationPage = ()=>{
                 },
                 body: JSON.stringify({ email, password, userName }),
             });
+            console.log("response",response);
 
             if (response.ok) {
                 const data = await response.json();
                 // 假设后端返回 { userName: "JohnDoe", token: "jwt-token" }
-
+                    console.log("useInfo data",data);
                 // 更新全局状态
-                userInfoDispatch({ type: 'SET_LOGIN', payload: data.userName });
+                userInfoDispatch({ type: 'SET_LOGIN', payload: data
+            });
                 console.log("data returned", data);
                 navigator("/main");
 
@@ -54,7 +56,7 @@ export const RegistrationPage = ()=>{
         }
     };
     return (
-        <form onSubmit={handleSubmit}  className='flex flex-col items-center justify-center h-full w-full'>
+        <form onSubmit={handleSubmit}  className='flex flex-col items-center justify-center h-full min-h-screen  w-full'>
                 <label htmlFor="email"
                 className='p-2 m-2 w-[320px] text-left text-gray-700'>
                     <p>Email{"  "}</p>

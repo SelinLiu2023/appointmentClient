@@ -24,13 +24,13 @@ export const LoginPage = ()=>{
                 },
                 body: JSON.stringify({ email, password }),
             });
-
+            console.log(" LoginPage login response", response);
             if (response.ok) {
                 const data = await response.json();
                 // 假设后端返回 { userName: "JohnDoe", token: "jwt-token" }
 
                 // 更新全局状态
-                console.log("login", data);
+                console.log(" LoginPage login data", data);
                 userInfoDispatch({ type: 'SET_LOGIN', payload: data});
                 navigator("/main");
                 // console.log("login response returned", data)
@@ -45,7 +45,7 @@ export const LoginPage = ()=>{
         }
     };
     return (
-        <form onSubmit={handleSubmit}  className='flex flex-col items-center justify-center h-full w-full'>
+        <form onSubmit={handleSubmit}  className='flex flex-col items-center justify-center h-full min-h-screen w-full'>
                 <label htmlFor="email"
                 className='p-2 m-2 w-[320px] text-left text-gray-700'>
                     <p>Email{"  "}</p>

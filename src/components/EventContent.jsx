@@ -1,4 +1,15 @@
+import { useContext,useEffect,useState } from "react";
+import { UserContext } from "../utils/UserContext";
+
 export const EventContent = ({event})=>{
+    const {userInfo} = useContext(UserContext);
+    let invitation = true;
+    
+    if(userInfo._id === event.createdBy){
+        invitation = false;
+    }else{
+        invitation = true;
+    }
     console.log("EventContent", event)
     const startTime = new Date(event.startTime);
     const localStartTime = startTime.toLocaleString("de-DE", {
@@ -19,66 +30,82 @@ export const EventContent = ({event})=>{
         second: "2-digit",
     });
     console.log("EventContent",event);
+    const GuestDecition =({isJoinIn})=>{
+        if(isJoinIn === "waitingForAnswer"){
+            return (<p className="bg-[#2D4B73] text-white">Noch unentschieden</p>);
+        }else if(isJoinIn === "joinedin"){
+            return (<p className="bg-[#007566] text-white">Annehmen</p>);
+        }else{
+                        //NotJoinedin
+            return (<p className="bg-[#BF8D30] text-white">Ablehnen</p>);
+        }
+    }
+    // const TaskTake =({task})=>{
+    //     if(task.performerCount > task.performerCount.length){
+    //         return (<p className="bg-[#2D4B73] text-white">Noch unentschieden</p>);
+    //     }else if(isJoinIn === "joinedin"){
+    //         return (<p>Annehmen</p>);
+    //     }else{
+    //         return (<p>Ablehnen</p>);
+    //     }
+    // }
     return(
-        <div>
+        <div className="text-gray-500">
             <p 
-                className='p-2 m-2 w-[320px] text-left text-gray-700 text-xl'>
+                className='text-2xl my-4 text-[#2D4B73]'>
                 {event.title}
             </p>
-            <p 
-                className='p-2 m-2 w-[320px] text-left text-gray-700 '>
-                {`Startzeit: ${localStartTime}`}
-            </p>
-            <p 
-                className='p-2 m-2 w-[320px] text-left text-gray-700 '>
-                {`Endzeit: ${localEndTime}`}
-            </p>
-            <p 
-                className='p-2 m-2 w-[320px] text-left text-gray-700 '>
-                {`Treffpunkt-Adresse: ${event.address}`}
-            </p>
-            {(event.mobileNumber !=="" || event.otherContact !=="")  &&
-            <p 
-                className='p-2 m-2 w-[320px] text-left text-gray-700 '>
-                {`Kontaktmöglichkeiten: ${event.mobileNumber}  ${event.otherContact}`}
-            </p>}
-            <p 
-                className='p-2 m-2 w-[320px] text-left text-gray-700 '>
-                {`Einzelheiten: ${event.description}`}
-            </p>
+            <div className="flex flex-row">
+                <p>Startzeit ： </p><p className="text-[#2D4B73]">{event.startTime}</p>
+            </div>
+            <div className="flex flex-row">
+                <p>Startzeit ： </p><p className="text-[#2D4B73]">{event.startTime}</p>
+            </div>
+            <div className="flex flex-row">
+                <p>Eingeladen von ： </p><p className="text-[#2D4B73]">{event.creatorName}</p>
+            </div>
+            <div className="flex flex-row">
+                <p>Handynummer ： </p><p className="text-[#2D4B73]">{event.mobileNumber}</p>
+            </div>
+            <div className="flex flex-row">
+                <p>Kontaktmöglichkeiten ： </p><p className="text-[#2D4B73]">{event.otherContact}</p>
+            </div>
+            <p>Treffpunkt-Adresse:</p>
+            <p>{event.address}</p>
+            <p>Einzelheiten:</p>
+            <p>{event.description}</p>
             <div>
                 <p 
-                    className='p-2 m-2 w-[320px] text-left text-gray-700 '>
+                    className='mt-4 border-b border-black'>
                     {"Gäste :"}
                 </p>
                 {
                     event.gasts.map(gast=>(
-                        <div>
-                        <p key={gast._id}>{gast.userName}</p>
-                        {gast.isJoinIn? <p>Teilnehmen</p>:<p>Nicht Teilnehmen</p>}
+                        <div key={gast._id} className="flex flex-row m-4">
+                        <p className="text-[#2D4B73] mr-4">{gast.userName}</p>
+                        <GuestDecition isJoinIn={gast.isJoinIn}/>
                         </div>
                     ))
                 }
             </div>
             <div>
-            <p 
-                    className='p-2 m-2 w-[320px] text-left text-gray-700 '>
-                    {"Aufgaben :"}
-                    </p>
-                    {event.tasks.length >0 &&
-                    event.tasks.map((task,i)=>(
-                        <div key={i}>
-                        <p >{task.title}</p>
-                        <p >{task.performerCount}</p>
+                <p className='mt-10 border-b border-black'>
+                    {"Aufgaben :"}</p>
+                {event.tasks.length >0 &&
+                    event.tasks.map((task)=>(
+                        <div key={task.id} className="flex flex-col m-4">
+                        <p className="text-[#2D4B73] mr-4">{task.title}</p>
+                        <div className="flex flex-row">
+                            <p>Anzahl der Ausführenden ： </p><p className="text-[#2D4B73]">{task.performerCount}</p>
+                        </div>
                         {
-                           task.performerCount >0 &&  task.performers.map(performer=>(
-                            <p>performer.userName</p>
-                           ))
+                            task.performerCount >0 &&  task.performers.map(performer=>(
+                                <p>{performer.userName}</p>
+                            ))
                         }
                         </div>
                     ))
                 }
-                
             </div>
         </div>
     );

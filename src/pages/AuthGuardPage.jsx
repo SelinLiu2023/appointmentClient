@@ -6,7 +6,6 @@ import { Navigate, Outlet } from "react-router-dom";
 export const AuthGuardPage = () => {
     const {userInfo} = useContext(UserContext);
     const isLogedin = userInfo.isLogedin;
-    console.log("userInfo", userInfo);
     // 如果用户未登录，导航到 HomePage
     if (!isLogedin) {
         // return <Navigate to="/login" replace/>;
