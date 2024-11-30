@@ -7,6 +7,7 @@ import { TaskComfirm } from "../components/TaskComfirm.jsx";
 export const SingleInvitationPage = ()=>{
     const {userInfo} = useContext(UserContext);
     const [event, setEvent] = useState(null);
+    const [modalOn, setModalOn] = useState(false);
     const {id} = useParams();
     const [tasksNeedToDo, setTasksNeedToDo] = useState([]);
     const navigator = useNavigate();
@@ -39,7 +40,7 @@ export const SingleInvitationPage = ()=>{
   
     useEffect(()=>{
         if (event && event.tasks && event.gasts.find(guest=>(guest._id === userInfo._id && guest.isJoinIn == 1))) {
-            const tasks = event.tasks.filter(task=> task.performerCount >= task.performers.length);
+            const tasks = event.tasks.filter(task=> task.performerCount > task.performers.length || task.performers.find(performer=>performer._id === userInfo._id));
             if(tasks.length > 0){
                 setTasksNeedToDo(tasks);
             }        
@@ -149,12 +150,11 @@ export const SingleInvitationPage = ()=>{
         let sendUpdate = 0;
         switch (guestReceived.isJoinIn) {
             case 0:
-            case -1:
                 if(guestUpdate.isJoinIn === -1){
                     updateInvitation.editByCreator = false;
                     updateInvitation.guestId = guestUpdate._id;
                     updateInvitation.guestName = guestUpdate.userName;
-                    updateInvitation.isJoinIn = guestUpdate.isJoinIn;
+                    updateInvitation.isJoinIn = -1;
                     updateInvitation.tasks = [];
                     updateInvitation.action = 0;
                     sendUpdate = 1;
@@ -162,8 +162,31 @@ export const SingleInvitationPage = ()=>{
                     const tasks = [];
                     for(let task of tasksUpdate){
                         if(task.performers.find(performer=>performer._id === userInfo._id)){
-                            tasks.push(task.id);
-                            sendUpdate = 1;
+                            tasks.push(task.id)
+                        }
+                    }
+                    updateInvitation.editByCreator = false;
+                    updateInvitation.guestId = guestUpdate._id;
+                    updateInvitation.isJoinIn = 1;
+                    updateInvitation.guestName = guestUpdate.userName;
+                    updateInvitation.tasks = tasks;
+                    updateInvitation.action = 1;
+                    sendUpdate = 1;
+                }
+            case -1:
+                if(guestUpdate.isJoinIn === 0){
+                    updateInvitation.editByCreator = false;
+                    updateInvitation.guestId = guestUpdate._id;
+                    updateInvitation.guestName = guestUpdate.userName;
+                    updateInvitation.isJoinIn = 0;
+                    updateInvitation.tasks = [];
+                    updateInvitation.action = 0;
+                    sendUpdate = 1;
+                }else if(guestUpdate.isJoinIn === 1){
+                    const tasks = [];
+                    for(let task of tasksUpdate){
+                        if(task.performers.find(performer=>performer._id === userInfo._id)){
+                            tasks.push(task.id)
                         }
                     }
                     updateInvitation.editByCreator = false;
@@ -172,8 +195,7 @@ export const SingleInvitationPage = ()=>{
                     updateInvitation.guestName = guestUpdate.userName;
                     updateInvitation.tasks = tasks;
                     updateInvitation.action = 1;
-                    
-
+                    sendUpdate = 1;
                 }
                 break;
             case 1:
@@ -197,23 +219,18 @@ export const SingleInvitationPage = ()=>{
                         const performerNew = task.performers.find(performer=>performer._id === userInfo._id);
                         const taskOld = tasksReceived.find(item=>item.id===task.id);
                         const performerOld = taskOld.performers.find(performer=>performer._id === userInfo._id);
-                        console.log("compare",performerNew,performerOld);
+                        // console.log("compare",performerNew,performerOld);
                         if((performerNew && !performerOld) || (!performerNew && performerOld)){
                             tasks.push(task.id);
+                            sendUpdate = 1; 
                         }
                     }
-                    // for(let task of tasksReceived){
-                    //     const tasksPerformers = task.performers.filter(performer=>!tasksUpdate.find(item=>item.id === task.id).performers.find(item=>performer._id === item.id));
-                    //     if(tasksPerformers.length>0)
-                    //         tasks =[...tasks, task.id];
-                    // }
                     updateInvitation.editByCreator = false;
                     updateInvitation.guestId = guestUpdate._id;
                     updateInvitation.guestName = guestUpdate.userName;
-                    updateInvitation.isJoinIn = guestUpdate.isJoinIn;
+                    updateInvitation.isJoinIn = 1;
                     updateInvitation.tasks = tasks;
                     updateInvitation.action = 1;
-                    sendUpdate = 1;                
                 }
                 break;
             default:
