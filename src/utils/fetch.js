@@ -104,3 +104,39 @@ export const getEvent = async (id, userId)=>{
 
 }
 
+export const updateEventAsGuest = async (id, request)=>{
+
+    try {
+        console.log("updateEventAsGuest id",id)
+        console.log("updateEventAsGuest request",request)
+        const response = await fetch(`${SERVER_URL}/event/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...request
+                // conditions: { status: "active" }
+            }),
+        });
+        // console.log("updateEventAsGuest response", response);
+        if (response.ok) {
+            const data = await response.json();
+            // 假设后端返回 { userName: "JohnDoe", token: "jwt-token" }
+            console.log("updateEventAsGuest response",data)
+            // 更新全局状态
+            // userInfoDispatch({ type: 'SET_LOGIN', payload: data.userName });
+            // navigator("/main");
+            // console.log("login response returned", data)
+            return data;
+
+        } else {
+            const error = await response.json();
+            console.log("update event fail",error.message)
+        }
+
+    } catch (error) {
+        console.log("update event, error", error)
+    }
+
+}

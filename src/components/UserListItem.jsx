@@ -12,7 +12,7 @@ export const UserListItem = ({user, setNewAppointment, confirmed})=>{
                     ...prev.gasts,
                     {
                         ...user,
-                        isJoinIn: "waitingForAnswer"
+                        isJoinIn: 0
                     },
                 ]
             }));

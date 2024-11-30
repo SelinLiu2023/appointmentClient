@@ -31,9 +31,9 @@ export const EventContent = ({event})=>{
     });
     console.log("EventContent",event);
     const GuestDecition =({isJoinIn})=>{
-        if(isJoinIn === "waitingForAnswer"){
+        if(isJoinIn === 0){
             return (<p className="bg-[#2D4B73] text-white">Noch unentschieden</p>);
-        }else if(isJoinIn === "joinedin"){
+        }else if(isJoinIn === 1){
             return (<p className="bg-[#007566] text-white">Annehmen</p>);
         }else{
                         //NotJoinedin

@@ -1,26 +1,35 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../utils/UserContext";
-import { getEvent } from "../utils/fetch.js";
+import { getEvent, updateEventAsGuest } from "../utils/fetch.js";
 import { EventContent } from "../components/EventContent";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TaskComfirm } from "../components/TaskComfirm.jsx";
 export const SingleInvitationPage = ()=>{
     const {userInfo} = useContext(UserContext);
     const [event, setEvent] = useState(null);
     const {id} = useParams();
     const [tasksNeedToDo, setTasksNeedToDo] = useState([]);
+    const navigator = useNavigate();
+    let receivedEvent = useRef(null);
+    // console.log("tasksNeedToDo",tasksNeedToDo)
     useEffect(()=>{
-    
-        if(event === null){
+        console.log("fetch event userInfo.isLogedin", userInfo.isLogedin);
+        if(event === null && userInfo.isLogedin){
+            // console.log("fetch event to go ");
+
             async function fetchEvents(id){
-                const result = await getEvent(id, userInfo._id);
-                setEvent(result);
+                const response = await getEvent(id, userInfo._id);
+                setEvent(response);
+                receivedEvent.current = response;
+                console.log("receivedEvent.current",receivedEvent.current);
+
             }
             fetchEvents(id);
-    
         }
-    },[]);
-
+    },[userInfo.isLogedin]);
+    useEffect(()=>{
+        // console.log("update event", event);
+    },[event]);
     // useEffect(()=>{
     //     const tasks = event.tasks.filter(task=> task.performerCount > task.performers.length);
     //     if(tasks.length > 0){
@@ -29,8 +38,8 @@ export const SingleInvitationPage = ()=>{
     // },[event.tasks]);
   
     useEffect(()=>{
-        if (event && event.tasks && event.gasts.find(guest=>(guest._id === userInfo._id && guest.isJoinIn == "joinedin"))) {
-            const tasks = event.tasks.filter(task=> task.performerCount > task.performers.length);
+        if (event && event.tasks && event.gasts.find(guest=>(guest._id === userInfo._id && guest.isJoinIn == 1))) {
+            const tasks = event.tasks.filter(task=> task.performerCount >= task.performers.length);
             if(tasks.length > 0){
                 setTasksNeedToDo(tasks);
             }        
@@ -42,7 +51,7 @@ export const SingleInvitationPage = ()=>{
         setEvent(prevEvent => ({
             ...prevEvent,
             gasts: prevEvent.gasts.map(gast =>
-                    gast._id === userInfo._id ? { ...gast, isJoinIn: "joinedin" } : gast
+                    gast._id === userInfo._id ? { ...gast, isJoinIn: 1 } : gast
             )
         }));
 
@@ -51,7 +60,7 @@ export const SingleInvitationPage = ()=>{
         setEvent(prevEvent => ({
             ...prevEvent,
             gasts: prevEvent.gasts.map(gast =>
-            gast._id === userInfo._id ? { ...gast, isJoinIn: "waitingForAnswer" } : gast
+            gast._id === userInfo._id ? { ...gast, isJoinIn: 0 } : gast
             )
         }));
         setTasksNeedToDo([])
@@ -76,7 +85,7 @@ export const SingleInvitationPage = ()=>{
         setEvent(prevEvent => ({
             ...prevEvent,
             gasts: prevEvent.gasts.map(gast =>
-            gast._id === userInfo._id ? { ...gast, isJoinIn: "NotJoinedin" } : gast
+            gast._id === userInfo._id ? { ...gast, isJoinIn: -1 } : gast
             )
         }));
         setTasksNeedToDo([])
@@ -97,7 +106,7 @@ export const SingleInvitationPage = ()=>{
         }
     };
     const handleComfirm = (taskId, clicked)=>{
-        console.log("handleComfirm taskId", taskId);
+        // console.log("handleComfirm taskId", taskId);
         if(!clicked){
             setEvent(prevEvent => ({
                 ...prevEvent,
@@ -126,15 +135,101 @@ export const SingleInvitationPage = ()=>{
             }));       
         }
 
-        // const tasks = event.tasks.filter(task=> task.performerCount > task.performers.length);
-        // if(tasks.length > 0){
-        //     setTasksNeedToDo(tasks);
-        // }
     }
+  
+    const handleUpdateInvitation= async()=>{
+        const updateInvitation = {};
 
+        const guestReceived = receivedEvent.current.gasts.find(guest=>guest._id === userInfo._id);
+        const guestUpdate = event.gasts.find(guest=>guest._id === userInfo._id);
+        const tasksReceived = receivedEvent.current.tasks;
+        // console.log("tasksReceived",tasksReceived);
+
+        const tasksUpdate = event.tasks;
+        let sendUpdate = 0;
+        switch (guestReceived.isJoinIn) {
+            case 0:
+            case -1:
+                if(guestUpdate.isJoinIn === -1){
+                    updateInvitation.editByCreator = false;
+                    updateInvitation.guestId = guestUpdate._id;
+                    updateInvitation.guestName = guestUpdate.userName;
+                    updateInvitation.isJoinIn = guestUpdate.isJoinIn;
+                    updateInvitation.tasks = [];
+                    updateInvitation.action = 0;
+                    sendUpdate = 1;
+                }else if(guestUpdate.isJoinIn === 1){
+                    const tasks = [];
+                    for(let task of tasksUpdate){
+                        if(task.performers.find(performer=>performer._id === userInfo._id)){
+                            tasks.push(task.id);
+                            sendUpdate = 1;
+                        }
+                    }
+                    updateInvitation.editByCreator = false;
+                    updateInvitation.guestId = guestUpdate._id;
+                    updateInvitation.isJoinIn = guestUpdate.isJoinIn;
+                    updateInvitation.guestName = guestUpdate.userName;
+                    updateInvitation.tasks = tasks;
+                    updateInvitation.action = 1;
+                    
+
+                }
+                break;
+            case 1:
+                if(guestUpdate.isJoinIn === -1 || guestUpdate.isJoinIn === 0){
+                    const tasks = [];
+                    for(let task of tasksReceived){
+                        if(task.performers.find(performer=>performer._id === userInfo._id)){
+                            tasks.push(task.id)
+                        }
+                    }
+                    updateInvitation.editByCreator = false;
+                    updateInvitation.guestId = guestUpdate._id;
+                    updateInvitation.guestName = guestUpdate.userName;
+                    updateInvitation.isJoinIn = guestUpdate.isJoinIn;
+                    updateInvitation.tasks = tasks;
+                    updateInvitation.action = -1;
+                    sendUpdate = 1;
+                }else if(guestUpdate.isJoinIn === 1){
+                    let tasks = [];
+                    for(let task of tasksUpdate){
+                        const performerNew = task.performers.find(performer=>performer._id === userInfo._id);
+                        const taskOld = tasksReceived.find(item=>item.id===task.id);
+                        const performerOld = taskOld.performers.find(performer=>performer._id === userInfo._id);
+                        console.log("compare",performerNew,performerOld);
+                        if((performerNew && !performerOld) || (!performerNew && performerOld)){
+                            tasks.push(task.id);
+                        }
+                    }
+                    // for(let task of tasksReceived){
+                    //     const tasksPerformers = task.performers.filter(performer=>!tasksUpdate.find(item=>item.id === task.id).performers.find(item=>performer._id === item.id));
+                    //     if(tasksPerformers.length>0)
+                    //         tasks =[...tasks, task.id];
+                    // }
+                    updateInvitation.editByCreator = false;
+                    updateInvitation.guestId = guestUpdate._id;
+                    updateInvitation.guestName = guestUpdate.userName;
+                    updateInvitation.isJoinIn = guestUpdate.isJoinIn;
+                    updateInvitation.tasks = tasks;
+                    updateInvitation.action = 1;
+                    sendUpdate = 1;                
+                }
+                break;
+            default:
+                break;
+        }
+        console.log("updateInvitation", updateInvitation);
+        if(sendUpdate){
+            console.log("patch event")
+            const result = await updateEventAsGuest(event._id, updateInvitation);
+            console.log("update result", result)
+            }
+        // navigator("/myinvitations");
+    };
     return (
         <div className="text-gray-500">
-            {event!==null && <EventContent event={event}></EventContent>}
+            {(event !== null && userInfo.isLogedin) && <EventContent event={event}></EventContent>}
             {/* <p>{event.title}</p> */}
             <div className="bg-[#8FC1B5] w-full min-w-[400px] px-1 pb-6 mb-10 flex flex-col  items-center justify-center">
                 <div className="flex flex-col mt-4">
@@ -164,7 +259,8 @@ export const SingleInvitationPage = ()=>{
                     }
                     </div>
                 }
-                <button className='bg-[#F2B33D] text-gray-700 p-2 rounded m-6 min-w-[100px] text-center '>Bestätigen</button>
+                <button onClick={handleUpdateInvitation}
+                className='bg-[#F2B33D] text-gray-700 p-2 rounded m-6 min-w-[100px] text-center '>Bestätigen</button>
             </div>
         </div>
         

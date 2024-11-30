@@ -20,7 +20,7 @@ export const UserListItem = ({event, setEvent})=>{
                     ...prev.gasts,
                     {
                         ...user,
-                        isJoinIn: "waitingForAnswer"
+                        isJoinIn: 0
                     },
                 ]
             }));

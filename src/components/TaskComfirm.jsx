@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FcCheckmark } from "react-icons/fc";
+import { UserContext } from "../utils/UserContext";
 
 export const TaskComfirm =({task, handleComfirm})=>{
+    const {userInfo} = useContext(UserContext);
     const [clicked, setClicket] = useState(false);
     const handleClicked = ()=>{
         setClicket(prev=>!prev);
         console.log("TaskComfirm, task.id",task.id);
         handleComfirm(task.id, clicked);
     }
+    console.log("user",userInfo._id, userInfo.userName);
+    console.log("task",task);
+    useEffect(()=>{
+        if(task.performers.find(performer=>performer._id === userInfo._id)){
+            setClicket(true);
+        }
+    },[]);
     return (
             <div className="flex flex-col m-4">
                 <div className="flex items-center justify-center">
