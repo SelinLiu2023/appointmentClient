@@ -4,6 +4,7 @@ import { getEvent, updateEventAsGuest } from "../utils/fetch.js";
 import { EventContent } from "../components/EventContent";
 import { useNavigate, useParams } from "react-router-dom";
 import { TaskComfirm } from "../components/TaskComfirm.jsx";
+import { MessageContext } from "../utils/MessageContext.jsx";
 export const SingleInvitationPage = ()=>{
     const {userInfo} = useContext(UserContext);
     const [event, setEvent] = useState(null);
@@ -11,6 +12,7 @@ export const SingleInvitationPage = ()=>{
     const {id} = useParams();
     const [tasksNeedToDo, setTasksNeedToDo] = useState([]);
     const navigator = useNavigate();
+    const {setMessage} = useContext(MessageContext);
     let receivedEvent = useRef(null);
     // console.log("tasksNeedToDo",tasksNeedToDo)
     useEffect(()=>{
@@ -241,7 +243,14 @@ export const SingleInvitationPage = ()=>{
             console.log("patch event")
             const result = await updateEventAsGuest(event._id, updateInvitation);
             console.log("update result", result)
+            const {updateCompleted} = result;
+            if(updateCompleted){
+                console.log("setMessage")
+                setMessage("Deine Bestätigung der Einladung war erfolgreich.");
+            }else{
+                setMessage("Deine Bestätigung der Einladung war nicht vollständig erfolgreich, möglicherweise haben andere schneller reagiert als du.");
             }
+        }
         // navigator("/myinvitations");
     };
     return (

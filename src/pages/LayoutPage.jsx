@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../utils/UserContext";
 import { useContext, useState ,useRef, useEffect} from "react";
+import { MessageContext } from "../utils/MessageContext";
 
 export const LayoutPage = ()=>{
     const {userInfo, userInfoDispatch} = useContext(UserContext);
@@ -8,6 +9,24 @@ export const LayoutPage = ()=>{
     const menuRef = useRef(null); // 引用菜单区域
     const buttonRef = useRef(null); // 引用按钮
     const navigator = useNavigate();
+    const {message, setMessage} = useContext(MessageContext);
+    const [showMessage, setShowMessage] = useState(true);
+
+
+    useEffect(()=>{
+        if (message === "") {
+            setShowMessage(false);
+            return;
+        }
+        setShowMessage(true);
+        const timer = setTimeout(() => {
+            setShowMessage(false);
+            setMessage("");
+        }, 10000);
+        return(()=>{
+            if(timer) clearTimeout(timer);
+        })
+    },[message]);
 
     // 点击外部区域时关闭菜单
     useEffect(() => {
@@ -65,7 +84,7 @@ export const LayoutPage = ()=>{
             </button>
 
             <div ref={menuRef}
-                className={`absolute top-10 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden transition-all duration-300 ${
+                className={`absolute z-50 top-10 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden transition-all duration-300 ${
                     isOpen ? "max-h-40" : "max-h-0"}`}
             >
                 <ul className="flex flex-col p-2">
@@ -76,6 +95,10 @@ export const LayoutPage = ()=>{
                 </ul>
             </div>
             </header>
+            {showMessage && 
+            <header className=" bg-[#F2762E] italic text-white absolute top-20 w-full sm:w-3/5">
+                <p className="p-1">{message}</p>
+            </header>}
             <main className="pt-12 flex flex-col justify-center items-center">
                 <Outlet></Outlet>
             </main>
