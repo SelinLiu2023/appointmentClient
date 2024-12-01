@@ -1,22 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { ProcessBar } from '../components/ProcessBar';
-import { GoArrowRight } from "react-icons/go";
-import { GoArrowLeft } from "react-icons/go";
-import { Time } from "../components/Time";
-import { Address } from "../components/Address";
-import { Description } from "../components/Description";
-import { Gasts } from "../components/Gasts";
 import { UserContext } from "../utils/UserContext";
 import { useNavigate } from "react-router-dom";
-import { Title } from '../components/Title';
-import { Tasks } from '../components/Tasks';
+import { ModifyEvent } from '../components/ModifyEvent';
+import { EventContent } from '../components/EventContent';
+import { MessageContext } from '../utils/MessageContext';
+import { postNewEvent } from "../utils/fetch.js";
 
 export const CreateNewAppointmentPage = () => {
     const {userInfo} = useContext(UserContext);
-    const [gotoNextStep, setGotoNextStep] = useState(false);
-    const [isStepCompleted, setStepCompleted] = useState(false);
-    const [step, setStep] = useState(1);
-    const [totalSteps, setTotalSteps] = useState(6);
+    const {setMessage} = useContext(MessageContext);
+    const [eventCreated,setEventCreated] =useState(false);
+    const [modalOn, setModalOn] = useState(true);
     const initState = {
         createdBy : userInfo._id,
         creatorName:userInfo.userName,
@@ -29,84 +23,62 @@ export const CreateNewAppointmentPage = () => {
         address: "",
         description: "",
         gasts:[],
-        wishes:{
-            title: "",
-            wishesList: []
-        },
+        wishes:[],
         tasks:[],
     };
  
     const [newAppointment, setNewAppointment] = useState(initState);
     const navigator = useNavigate();
 
+    // useEffect(()=>{
+    //     if(modalOn === false){
+    //         setNewAppointment(initState);
+    //         navigator("/main");
+    //     }
+    // }, [modalOn]);
     useEffect(()=>{
-        console.log("newAppointment", newAppointment);
-    }, [newAppointment]);
-    useEffect(()=>{
-        console.log("step",step);
-    }, [step]);
-    useEffect(()=>{
-        if(isStepCompleted===true){
-            setStep(prev=>prev + 1);
-            setStepCompleted(false);
+        if(eventCreated){
+            setModalOn(false);
+            console.log("close modal")
         }
-    },[isStepCompleted]);
+  
+    },[eventCreated]);
     useEffect(()=>{
-        if(newAppointment.type==="generalEvent"){
-            setTotalSteps(5);
+        if(!modalOn && !eventCreated){
+            navigator(`/main`);
+        }
+  
+    },[modalOn]);
+    const handleAddEvent = async()=>{
+        console.log("handleAddEvent");
+        const result = await postNewEvent(newAppointment);
+        if(result){
+            setMessage("Einladung erfolgreich.")
         }else{
-            setTotalSteps(6);
+            setMessage("Einladung fehlgeschlagen.");
         }
-    },[newAppointment.type]);
-    const setNextStep = ()=>{
-        setGotoNextStep(true);
-    };
-    const setPrevStep = ()=>{
-        setStepCompleted(false);
-        setStep(prev=>prev - 1);
-    };
-    const closeModel= ()=>{
-        setNewAppointment(initState);
-        navigator("/main");
-    };
+        navigator(`/main`);
+    }
+    const handleQuit = ()=>{
+        navigator(`/main`);
+    }
     return (
-        <div className='w-screen h-screen fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 flex-col'>
-
-            <div onClick={e => e.stopPropagation()}
-            className="relative w-3/4 max-w-xl h-3/4 flex flex-col justify-center items-center bg-gray-100 p-6 rounded-lg shadow-md"
-            >
+        <div className='flex flex-col'>
+            {
+                modalOn &&
+                <ModifyEvent newAppointment={newAppointment} setNewAppointment={setNewAppointment} setEventCreated={setEventCreated}  setModalOn={setModalOn}></ModifyEvent> 
+                
+            }
+            {(!modalOn && eventCreated) &&
+            <>
+            <EventContent event ={newAppointment}></EventContent>
+            <button onClick={handleAddEvent}
+                className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center '>Bestätigen</button>
+            <button onClick={handleQuit}
+                className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center '>Schließen</button>
+                </>
+            }
             
-                <button onClick={closeModel} 
-                className="absolute top-3 right-3 text-gray-400 hover:text-black">
-                    X
-                </button>
-                <div  className="overflow-auto">
-
-
-                    {step === 1 && <Title newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Title>}
-
-                    {step === 2 && <Time newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Time>}
-                    
-                    {step === 3 &&    <Address newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Address>}
-
-                    { step === 4 &&      <Description newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Description>}
-                    { step === 5 &&     <Gasts newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep} totalSteps={totalSteps}></Gasts>}
-                    { step === 6 &&     <Tasks newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep} totalSteps={totalSteps}></Tasks>}
-                </div>
-
-                <button onClick={setPrevStep} 
-                disabled={step <= 1} className='absolute left-2 text-gray-700 hover:text-gray-700 hover:border-b hover:border-b-gray-700 hover:border-b-[1px] transition-all duration-200 disabled:cursor-default disabled:text-gray-400 disabled:hover:text-gray-400 disabled:hover:border-none'>
-                    <GoArrowLeft />
-                </button>
-
-                <button onClick={setNextStep} 
-                disabled={step >= totalSteps} 
-                className="absolute right-2 text-gray-700 hover:text-gray-700 hover:border-b hover:border-b-gray-700 hover:border-b-[1px] transition-all duration-200 disabled:cursor-default disabled:text-gray-400 disabled:hover:text-gray-400 disabled:hover:border-none">
-                    <GoArrowRight />
-                </button>
-            </div>
-
-            <ProcessBar step={step} totalSteps={totalSteps}></ProcessBar>
         </div>
     );
 };

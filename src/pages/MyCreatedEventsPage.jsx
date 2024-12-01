@@ -7,8 +7,6 @@ export const MyCreatedEventsPage =()=>{
     const {createdEvents} = userInfo;
     return(
         <div>
-            MyReceivedInvitationsPage
-            
             {createdEvents.length === 0 ?
             <p>Keine erstellten Events vorhanden.</p> :
             <div>
@@ -19,6 +17,7 @@ export const MyCreatedEventsPage =()=>{
                 }
             </div>
             }
+            
         </div>
     );
 }

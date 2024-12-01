@@ -8,7 +8,6 @@ import { MessageContext } from "../utils/MessageContext.jsx";
 export const SingleInvitationPage = ()=>{
     const {userInfo} = useContext(UserContext);
     const [event, setEvent] = useState(null);
-    const [modalOn, setModalOn] = useState(false);
     const {id} = useParams();
     const [tasksNeedToDo, setTasksNeedToDo] = useState([]);
     const navigator = useNavigate();

@@ -1,7 +1,7 @@
 
 import { useContext } from "react";
 import { UserContext } from "../utils/UserContext";
-import { EventItem } from "../components/EventItem";
+import { InvitationItem } from "../components/InvitationItem";
 
 export const MyReceivedInvitationsPage =()=>{
     const {userInfo} = useContext(UserContext);
@@ -15,7 +15,7 @@ export const MyReceivedInvitationsPage =()=>{
             <div>
                 {
                     receivedEvents.map(event=>(
-                        <EventItem key={event._id} event={event}></EventItem>
+                        <InvitationItem key={event._id} event={event}></InvitationItem>
                     ))
                 }
             </div>

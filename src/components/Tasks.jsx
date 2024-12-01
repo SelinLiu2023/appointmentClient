@@ -9,7 +9,7 @@ import { postNewEvent } from "../utils/fetch.js";
 import { useNavigate } from "react-router-dom";
 import {v4 as uuid} from "uuid";
 
-export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps})=>{
+export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps, setEventCreated})=>{
     // const [showInputGastName, setShowInputGastName] = useState(false);
     // const [showGastGroups, setShowGastGroups] = useState(false);
     const [taskTitle, setTaskTitle] = useState("");
@@ -41,6 +41,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                         title: taskTitle,
                         description: taskDescription,
                         performerCount : taskPerformerCount,
+                        performers:[]
                     }
                 ]
             }));
@@ -61,11 +62,9 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
             setTaskPerformerCount(editTask.performerCount);
         }
     },[editTask]);
-    const handleAddEvent = async()=>{
-        console.log("handleAddEvent");
-        const newEventId = await postNewEvent(newAppointment);
-        console.log("event response", newEventId)
-        navigator(`/event/${newEventId}`);
+    const handleSetEvent = ()=>{
+        console.log("hahha")
+        setEventCreated(true);
     }
     return (
         <div className="flex flex-col justify-center">
@@ -117,7 +116,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                     className='text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-[#2D4B73]'/>
                 </div>
 
-       {totalSteps === 6 && <button onClick={handleAddEvent} className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
+       {totalSteps === 6 && <button onClick={handleSetEvent} className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
         </div>
     );
 };
