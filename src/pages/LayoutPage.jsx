@@ -84,13 +84,15 @@ export const LayoutPage = ()=>{
             </button>
 
             <div ref={menuRef}
-                className={`absolute z-50 top-10 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-40" : "max-h-0"}`}
+                className={`absolute z-50 top-10 mt-2 mb-2  w-70 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden transition-all duration-300 ${
+                    isOpen ? "max-h-80" : "max-h-0"}`}
             >
                 <ul className="flex flex-col p-2">
-                    <NavLink to={"/groups"}
-                    className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Meine Gruppe</NavLink>
-                    <li className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">About</li>
+                    <NavLink to={"/newappointment"}
+                    className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Ein neues Event Erstellen</NavLink>
+                    <NavLink to={"/myevents"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Erstellte Events</NavLink>
+                    <NavLink to={"/myinvitations"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Eingegangene Einladungen</NavLink>
+       
                     <li onClick={handleLogout} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Log out</li>
                 </ul>
             </div>

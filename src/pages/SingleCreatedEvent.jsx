@@ -5,8 +5,10 @@ import { UserContext } from "../utils/UserContext";
 import { EventContent } from "../components/EventContent.jsx";
 import { ModifyEvent } from "../components/ModifyEvent.jsx";
 import { updateEventAsCreator } from "../utils/fetch.js";
+import { MessageContext } from "../utils/MessageContext.jsx";
 export const SingleCreatedEvent = ()=>{
     const {userInfo} = useContext(UserContext);
+    const {setMessage} = useContext(MessageContext);
     const [event, setEvent] = useState(null);
     const {id} = useParams();
     const [tasksNeedToDo, setTasksNeedToDo] = useState([]);
@@ -54,8 +56,14 @@ export const SingleCreatedEvent = ()=>{
         setModalOn(false);
 
     }
-    const handleUpdateEvent=()=>{
-        updateEventAsCreator(id,event);
+    const handleUpdateEvent=async()=>{
+        const result = await updateEventAsCreator(id,event);
+        if(result){
+            setMessage("Einladung erfolgreich.")
+        }else{
+            setMessage("Einladung fehlgeschlagen.");
+        }
+        navigator(`/main`);
     }
     return(
     <div>

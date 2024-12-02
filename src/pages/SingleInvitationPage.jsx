@@ -24,7 +24,6 @@ export const SingleInvitationPage = ()=>{
                 setEvent(response);
                 receivedEvent.current = response;
                 console.log("receivedEvent.current",receivedEvent.current);
-
             }
             fetchEvents(id);
         }
@@ -250,7 +249,7 @@ export const SingleInvitationPage = ()=>{
                 setMessage("Deine Bestätigung der Einladung war nicht vollständig erfolgreich, möglicherweise haben andere schneller reagiert als du.");
             }
         }
-        // navigator("/myinvitations");
+        navigator("/myinvitations");
     };
     return (
         <div className="text-gray-500">

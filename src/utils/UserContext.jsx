@@ -25,6 +25,12 @@ function reducer(state, action) {
             return {
                 ...action.payload
             };
+        case "UPDATE_FETCH":
+            return {
+                ...state,
+                createdEvents: [...action.payload.createdEvents],
+                receivedEvents:[...action.payload.receivedEvents]
+            };
         default:
             return state;
     }

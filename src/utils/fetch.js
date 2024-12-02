@@ -165,15 +165,43 @@ export const updateEventAsCreator = async (id, event)=>{
             // userInfoDispatch({ type: 'SET_LOGIN', payload: data.userName });
             // navigator("/main");
             // console.log("login response returned", data)
-            return data;
+            return true;
 
         } else {
             const error = await response.json();
             console.log("update event fail",error.message)
+            return false;
         }
 
     } catch (error) {
         console.log("update event, error", error)
     }
 
+}
+export const getUser= async (userId)=>{
+    try {
+        const response = await fetch(`${SERVER_URL}/user/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (response.ok) {
+            const data = await response.json();
+            // 假设后端返回 { userName: "JohnDoe", token: "jwt-token" }
+            console.log("fetchUser response",data)
+            // 更新全局状态
+            // userInfoDispatch({ type: 'SET_LOGIN', payload: data.userName });
+            // navigator("/main");
+            // console.log("login response returned", data)
+            return data;
+
+        } else {
+            const error = await response.json();
+            console.log("fetchUser fail",error.message)
+            return null;
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }

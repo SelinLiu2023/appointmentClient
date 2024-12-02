@@ -17,16 +17,21 @@ export const UserListItem = ({user, setNewAppointment, confirmed})=>{
                 ]
             }));
         }else{
+            
             setNewAppointment(prev=>({
                 ...prev,
-                gasts: prev.gasts.filter(item=>item._id !== user._id)
+                gasts: prev.gasts.filter(item=>item._id !== user._id),
+                tasks: prev.tasks.map(task=>({
+                        ...task,
+                        performers: task.performers.filter(item=>item._id !== user._id)
+                    }))
             }));
         }
     };
-    useEffect(()=>{
-        console.log("gasts",setNewAppointment)
+    // useEffect(()=>{
+    //     console.log("gasts",setNewAppointment)
   
-    },[setNewAppointment.gasts]);
+    // },[setNewAppointment.gasts]);
     return (
         <div className="flex flex-row items-center justify-cente">
             {/* <label htmlFor="gastName"

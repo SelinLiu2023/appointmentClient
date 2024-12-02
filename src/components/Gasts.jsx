@@ -3,7 +3,7 @@ import "../styles.css";
 import { RegisteredGast } from "./RegisteredGast";
 import { UserListItem } from "./UserListItem";
 
-export const Gasts = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps})=>{
+export const Gasts = ({newAppointment, setNewAppointment,gotoNextStep,setStepCompleted,setGotoNextStep, totalSteps, setEventCreated})=>{
     // const [showInputGastName, setShowInputGastName] = useState(false);
     // const [showGastGroups, setShowGastGroups] = useState(false);
     const [showRegiesterUsers, setShowRegiesterUsers] = useState(false);
@@ -16,7 +16,9 @@ export const Gasts = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
             setGotoNextStep(false);
         }
     },[gotoNextStep]);
-
+    const handleSetEvent = ()=>{
+        setEventCreated(true);
+    }
     return (
         <div className="flex flex-col justify-center">
             <div>
@@ -52,7 +54,7 @@ export const Gasts = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                     }
                 </div>
             </div> */}
-    {totalSteps === 5 && <button className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
+    {totalSteps === 5 && <button onClick={handleSetEvent} className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
         </div>
     );
 };

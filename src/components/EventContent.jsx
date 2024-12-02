@@ -52,29 +52,33 @@ export const EventContent = ({event})=>{
     return(
         <div className="text-gray-500">
             <p 
-                className='text-2xl my-4 text-[#2D4B73]'>
+                className='text-2xl my-4 text-[#2D4B73]' key={"title"}>
                 {event.title}
             </p>
-            <div className="flex flex-row">
-                <p>Startzeit ： </p><p className="text-[#2D4B73]">{event.startTime}</p>
+            <div className="flex flex-row" key={"startTime"}>
+                <p>Startzeit ： </p><p className="text-[#2D4B73]">{localStartTime}</p>
             </div>
-            <div className="flex flex-row">
-                <p>Startzeit ： </p><p className="text-[#2D4B73]">{event.startTime}</p>
+            <div className="flex flex-row" key={"endTime"}>
+                <p>Endzeit ： </p><p className="text-[#2D4B73]">{localEndTime}</p>
             </div>
             <div className="flex flex-row">
                 <p>Eingeladen von ： </p><p className="text-[#2D4B73]">{event.creatorName}</p>
             </div>
-            <div className="flex flex-row">
+            {(event.mobileNumber !== "") && <div className="flex flex-row" key={"mobileNumber"}>
                 <p>Handynummer ： </p><p className="text-[#2D4B73]">{event.mobileNumber}</p>
-            </div>
-            <div className="flex flex-row">
+            </div>}
+            {(event.otherContact !== "") && <div className="flex flex-row" key={"otherContact"}>
                 <p>Kontaktmöglichkeiten ： </p><p className="text-[#2D4B73]">{event.otherContact}</p>
-            </div>
-            <p>Treffpunkt-Adresse:</p>
-            <p>{event.address}</p>
-            <p>Einzelheiten:</p>
-            <p>{event.description}</p>
-            <div>
+            </div>}
+            {(event.adresse !== "") && <div className="flex flex-row" key={"adresse"}>
+                <p key={"address"}>Treffpunkt-Adresse:</p>
+                <p>{event.address}</p>
+            </div>}
+            {(event.description !== "") && <div className="flex flex-row" key={"description"}>
+                <p>Einzelheiten:</p>
+                <p>{event.description}</p>
+            </div>}
+            <div key={"guests"}>
                 <p 
                     className='mt-4 border-b border-black'>
                     {"Gäste :"}
@@ -88,7 +92,7 @@ export const EventContent = ({event})=>{
                     ))
                 }
             </div>
-            <div>
+            <div key={"tasks"}>
                 <p className='mt-10 border-b border-black'>
                     {"Aufgaben :"}</p>
                 {event.tasks.length >0 &&

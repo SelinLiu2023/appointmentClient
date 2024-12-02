@@ -10,11 +10,15 @@ export const CreateNewAppointmentPage = () => {
     const {userInfo} = useContext(UserContext);
     const {setMessage} = useContext(MessageContext);
     const [eventCreated,setEventCreated] =useState(false);
+    //direct open modal, let user create a new event
     const [modalOn, setModalOn] = useState(true);
+    //status: 0:new; 1: updated; -1:canceled
     const initState = {
         createdBy : userInfo._id,
         creatorName:userInfo.userName,
+        isReadByCreator: true,
         title: "",
+        status: 0,
         mobileNumber: "",
         otherContact: "",
         type: "",
@@ -26,31 +30,22 @@ export const CreateNewAppointmentPage = () => {
         wishes:[],
         tasks:[],
     };
- 
     const [newAppointment, setNewAppointment] = useState(initState);
     const navigator = useNavigate();
-
-    // useEffect(()=>{
-    //     if(modalOn === false){
-    //         setNewAppointment(initState);
-    //         navigator("/main");
-    //     }
-    // }, [modalOn]);
     useEffect(()=>{
+        //if event is finished( eventCreated triggered from Task or Gast), closed the modal
         if(eventCreated){
             setModalOn(false);
-            console.log("close modal")
         }
-  
     },[eventCreated]);
     useEffect(()=>{
+        //if user didn't finish the event, but closed modal, then go to MainPage
         if(!modalOn && !eventCreated){
             navigator(`/main`);
         }
-  
     },[modalOn]);
     const handleAddEvent = async()=>{
-        console.log("handleAddEvent");
+        // send POST API to server, add a event document
         const result = await postNewEvent(newAppointment);
         if(result){
             setMessage("Einladung erfolgreich.")
@@ -60,25 +55,24 @@ export const CreateNewAppointmentPage = () => {
         navigator(`/main`);
     }
     const handleQuit = ()=>{
+        // user finished a event, but doesn't want to send it. Click "schließen" button.
         navigator(`/main`);
     }
     return (
         <div className='flex flex-col'>
             {
                 modalOn &&
-                <ModifyEvent newAppointment={newAppointment} setNewAppointment={setNewAppointment} setEventCreated={setEventCreated}  setModalOn={setModalOn}></ModifyEvent> 
-                
+                <ModifyEvent newAppointment={newAppointment} setNewAppointment={setNewAppointment} setEventCreated={setEventCreated}  setModalOn={setModalOn}/>
             }
             {(!modalOn && eventCreated) &&
-            <>
-            <EventContent event ={newAppointment}></EventContent>
-            <button onClick={handleAddEvent}
-                className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center '>Bestätigen</button>
-            <button onClick={handleQuit}
-                className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center '>Schließen</button>
+                <>
+                <EventContent event ={newAppointment}></EventContent>
+                <button onClick={handleAddEvent}
+                    className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center '>Bestätigen</button>
+                <button onClick={handleQuit}
+                    className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center '>Schließen</button>
                 </>
             }
-            
         </div>
     );
 };

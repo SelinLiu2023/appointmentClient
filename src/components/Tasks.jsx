@@ -63,7 +63,6 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
         }
     },[editTask]);
     const handleSetEvent = ()=>{
-        console.log("hahha")
         setEventCreated(true);
     }
     return (

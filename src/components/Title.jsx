@@ -51,6 +51,7 @@ export const Title = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                         type="radio"
                         id="birthdayParty"
                         value="birthdayParty"
+                        checked={newAppointment.type === "birthdayParty"}
                         // placeholder="Your apointment's address"
                         onChange={handleChangeType}/>
             </div>
@@ -64,6 +65,7 @@ export const Title = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                         id="activity"
                         type="radio"
                         value="activity"
+                        checked={newAppointment.type === "activity"}
                         // placeholder="Your apointment's address"
                         onChange={handleChangeType}/>
             </div>
@@ -77,6 +79,8 @@ export const Title = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                         id="generalEvent"
                         type="radio"
                         value="generalEvent"
+                        checked={newAppointment.type === "generalEvent"}
+
                         // placeholder="Your apointment's address"
                         onChange={handleChangeType}/>
             </div>

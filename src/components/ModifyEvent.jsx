@@ -10,28 +10,22 @@ import { UserContext } from "../utils/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Title } from '../components/Title';
 import { Tasks } from '../components/Tasks';
-import { EventContent } from '../components/EventContent';
-
 
 export const ModifyEvent =({newAppointment, setNewAppointment, setEventCreated, setModalOn})=>{
-    const {userInfo} = useContext(UserContext);
     const [gotoNextStep, setGotoNextStep] = useState(false);
     const [isStepCompleted, setStepCompleted] = useState(false);
     const [step, setStep] = useState(1);
     const [totalSteps, setTotalSteps] = useState(6);
-    const navigator = useNavigate();
-
-
     useEffect(()=>{
-        console.log("step",step);
-    }, [step]);
-    useEffect(()=>{
+        //isStepCompleted is seted by StepComponent. when click "next step", they will varify data and //set isStepCompleted as true or false.
+        //if isStepCompleted is true, means current data is varified, we can go to next step. reset isStepCompleted for next step.
         if(isStepCompleted===true){
             setStep(prev=>prev + 1);
             setStepCompleted(false);
         }
     },[isStepCompleted]);
     useEffect(()=>{
+        //generalEvent don't need "tasks", has les steps
         if(newAppointment.type==="generalEvent"){
             setTotalSteps(5);
         }else{
@@ -39,30 +33,27 @@ export const ModifyEvent =({newAppointment, setNewAppointment, setEventCreated, 
         }
     },[newAppointment.type]);
     const setNextStep = ()=>{
+        // this will trigger StepComponent to varify input data.
         setGotoNextStep(true);
     };
     const setPrevStep = ()=>{
+        //in case user want to go to previous step to modify, reset isStepCompleted to allow it varify new input data again. 
         setStepCompleted(false);
         setStep(prev=>prev - 1);
     };
     const closeModel= ()=>{
-        // setNewAppointment(initState);
         setModalOn(false);
     };
     return (
         <div className='w-screen h-screen fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 flex-col'>
-
             <div onClick={e => e.stopPropagation()}
             className="relative w-3/4 max-w-xl h-3/4 flex flex-col justify-center items-center bg-gray-100 p-6 rounded-lg shadow-md"
             >
-            
                 <button onClick={closeModel} 
                 className="absolute top-3 right-3 text-gray-400 hover:text-black">
                     X
                 </button>
                 <div  className="overflow-auto">
-
-
                     {step === 1 && <Title newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Title>}
 
                     {step === 2 && <Time newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Time>}
@@ -85,7 +76,6 @@ export const ModifyEvent =({newAppointment, setNewAppointment, setEventCreated, 
                     <GoArrowRight />
                 </button>
             </div>
-
             <ProcessBar step={step} totalSteps={totalSteps}></ProcessBar>
         </div>
     );
