@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProcessBar } from '../components/ProcessBar';
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
@@ -6,8 +6,6 @@ import { Time } from "../components/Time";
 import { Address } from "../components/Address";
 import { Description } from "../components/Description";
 import { Gasts } from "../components/Gasts";
-import { UserContext } from "../utils/UserContext";
-import { useNavigate } from "react-router-dom";
 import { Title } from '../components/Title';
 import { Tasks } from '../components/Tasks';
 
@@ -55,21 +53,17 @@ export const ModifyEvent =({newAppointment, setNewAppointment, setEventCreated, 
                 </button>
                 <div  className="overflow-auto">
                     {step === 1 && <Title newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Title>}
-
                     {step === 2 && <Time newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Time>}
                     
                     {step === 3 &&    <Address newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Address>}
-
                     { step === 4 &&      <Description newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Description>}
                     { step === 5 &&     <Gasts newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep} totalSteps={totalSteps} setEventCreated={setEventCreated}></Gasts>}
                     { step === 6 &&     <Tasks newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep} totalSteps={totalSteps} setEventCreated={setEventCreated}></Tasks>}
                 </div>
-
                 <button onClick={setPrevStep} 
                 disabled={step <= 1} className='absolute left-2 text-gray-700 hover:text-gray-700 hover:border-b hover:border-b-gray-700 hover:border-b-[1px] transition-all duration-200 disabled:cursor-default disabled:text-gray-400 disabled:hover:text-gray-400 disabled:hover:border-none'>
                     <GoArrowLeft />
                 </button>
-
                 <button onClick={setNextStep} 
                 disabled={step >= totalSteps} 
                 className="absolute right-2 text-gray-700 hover:text-gray-700 hover:border-b hover:border-b-gray-700 hover:border-b-[1px] transition-all duration-200 disabled:cursor-default disabled:text-gray-400 disabled:hover:text-gray-400 disabled:hover:border-none">

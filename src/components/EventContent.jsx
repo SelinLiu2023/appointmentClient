@@ -1,10 +1,9 @@
-import { useContext,useEffect,useState } from "react";
+import { useContext} from "react";
 import { UserContext } from "../utils/UserContext";
 
 export const EventContent = ({event})=>{
     const {userInfo} = useContext(UserContext);
     let invitation = true;
-    
     if(userInfo._id === event.createdBy){
         invitation = false;
     }else{
@@ -14,7 +13,7 @@ export const EventContent = ({event})=>{
     const startTime = new Date(event.startTime);
     const localStartTime = startTime.toLocaleString("de-DE", {
         year: "numeric",
-        month: "long", // 全称的月份
+        month: "long", 
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
@@ -29,26 +28,15 @@ export const EventContent = ({event})=>{
         minute: "2-digit",
         second: "2-digit",
     });
-    console.log("EventContent",event);
     const GuestDecition =({isJoinIn})=>{
         if(isJoinIn === 0){
             return (<p className="bg-[#2D4B73] text-white">Noch unentschieden</p>);
         }else if(isJoinIn === 1){
             return (<p className="bg-[#007566] text-white">Annehmen</p>);
         }else{
-                        //NotJoinedin
             return (<p className="bg-[#BF8D30] text-white">Ablehnen</p>);
         }
     }
-    // const TaskTake =({task})=>{
-    //     if(task.performerCount > task.performerCount.length){
-    //         return (<p className="bg-[#2D4B73] text-white">Noch unentschieden</p>);
-    //     }else if(isJoinIn === "joinedin"){
-    //         return (<p>Annehmen</p>);
-    //     }else{
-    //         return (<p>Ablehnen</p>);
-    //     }
-    // }
     return(
         <div className="text-gray-500">
             <p 
@@ -56,27 +44,27 @@ export const EventContent = ({event})=>{
                 {event.title}
             </p>
             <div className="flex flex-row" key={"startTime"}>
-                <p>Startzeit ： </p><p className="text-[#2D4B73]">{localStartTime}</p>
+                <p>Startzeit ： </p><p className="text-[#2D4B73] pl-2">{localStartTime}</p>
             </div>
             <div className="flex flex-row" key={"endTime"}>
-                <p>Endzeit ： </p><p className="text-[#2D4B73]">{localEndTime}</p>
+                <p>Endzeit ： </p><p className="text-[#2D4B73] pl-2">{localEndTime}</p>
             </div>
             <div className="flex flex-row">
-                <p>Eingeladen von ： </p><p className="text-[#2D4B73]">{event.creatorName}</p>
+                <p>Eingeladen von ： </p><p className="text-[#2D4B73] pl-2">{event.creatorName}</p>
             </div>
             {(event.mobileNumber !== "") && <div className="flex flex-row" key={"mobileNumber"}>
-                <p>Handynummer ： </p><p className="text-[#2D4B73]">{event.mobileNumber}</p>
+                <p>Handynummer ： </p><p className="text-[#2D4B73] pl-2">{event.mobileNumber}</p>
             </div>}
             {(event.otherContact !== "") && <div className="flex flex-row" key={"otherContact"}>
-                <p>Kontaktmöglichkeiten ： </p><p className="text-[#2D4B73]">{event.otherContact}</p>
+                <p >Kontaktmöglichkeiten ： </p><p className="text-[#2D4B73] pl-2">{event.otherContact}</p>
             </div>}
             {(event.adresse !== "") && <div className="flex flex-row" key={"adresse"}>
-                <p key={"address"}>Treffpunkt-Adresse:</p>
-                <p>{event.address}</p>
+                <p >Treffpunkt-Adresse : </p>
+                <p className="text-[#2D4B73] pl-2"> {event.address}</p>
             </div>}
             {(event.description !== "") && <div className="flex flex-row" key={"description"}>
                 <p>Einzelheiten:</p>
-                <p>{event.description}</p>
+                <p className="text-[#2D4B73] pl-2">{event.description}</p>
             </div>}
             <div key={"guests"}>
                 <p 
@@ -104,7 +92,7 @@ export const EventContent = ({event})=>{
                         </div>
                         {
                             task.performerCount >0 &&  task.performers.map(performer=>(
-                                <p>{performer.userName}</p>
+                                <p className="text-[#2D4B73]">{performer.userName}</p>
                             ))
                         }
                         </div>

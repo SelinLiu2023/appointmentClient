@@ -5,18 +5,15 @@ import { ModifyEvent } from '../components/ModifyEvent';
 import { EventContent } from '../components/EventContent';
 import { MessageContext } from '../utils/MessageContext';
 import { postNewEvent } from "../utils/fetch.js";
-
 export const CreateNewAppointmentPage = () => {
     const {userInfo} = useContext(UserContext);
     const {setMessage} = useContext(MessageContext);
     const [eventCreated,setEventCreated] =useState(false);
     //direct open modal, let user create a new event
     const [modalOn, setModalOn] = useState(true);
-    //status: 0:new; 1: updated; -1:canceled
     const initState = {
         createdBy : userInfo._id,
         creatorName:userInfo.userName,
-        isReadByCreator: true,
         title: "",
         status: 0,
         mobileNumber: "",
@@ -34,6 +31,7 @@ export const CreateNewAppointmentPage = () => {
     const navigator = useNavigate();
     useEffect(()=>{
         //if event is finished( eventCreated triggered from Task or Gast), closed the modal
+        //and show the eventContent
         if(eventCreated){
             setModalOn(false);
         }
@@ -47,6 +45,7 @@ export const CreateNewAppointmentPage = () => {
     const handleAddEvent = async()=>{
         // send POST API to server, add a event document
         const result = await postNewEvent(newAppointment);
+        //this message will be shown on the top
         if(result){
             setMessage("Einladung erfolgreich.")
         }else{
@@ -68,9 +67,9 @@ export const CreateNewAppointmentPage = () => {
                 <>
                 <EventContent event ={newAppointment}></EventContent>
                 <button onClick={handleAddEvent}
-                    className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center '>Bestätigen</button>
+                    className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center hover:text-white'>Bestätigen</button>
                 <button onClick={handleQuit}
-                    className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center '>Schließen</button>
+                    className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center hover:text-gray-400'>Schließen</button>
                 </>
             }
         </div>

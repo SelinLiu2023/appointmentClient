@@ -13,12 +13,8 @@ export const SingleInvitationPage = ()=>{
     const navigator = useNavigate();
     const {setMessage} = useContext(MessageContext);
     let receivedEvent = useRef(null);
-    // console.log("tasksNeedToDo",tasksNeedToDo)
     useEffect(()=>{
-        console.log("fetch event userInfo.isLogedin", userInfo.isLogedin);
         if(event === null && userInfo.isLogedin){
-            // console.log("fetch event to go ");
-
             async function fetchEvents(id){
                 const response = await getEvent(id, userInfo._id);
                 setEvent(response);
@@ -29,25 +25,13 @@ export const SingleInvitationPage = ()=>{
         }
     },[userInfo.isLogedin]);
     useEffect(()=>{
-        // console.log("update event", event);
-    },[event]);
-    // useEffect(()=>{
-    //     const tasks = event.tasks.filter(task=> task.performerCount > task.performers.length);
-    //     if(tasks.length > 0){
-    //         setTasksNeedToDo(tasks);
-    //     }
-    // },[event.tasks]);
-  
-    useEffect(()=>{
         if (event && event.tasks && event.gasts.find(guest=>(guest._id === userInfo._id && guest.isJoinIn == 1))) {
             const tasks = event.tasks.filter(task=> task.performerCount > task.performers.length || task.performers.find(performer=>performer._id === userInfo._id));
             if(tasks.length > 0){
                 setTasksNeedToDo(tasks);
             }        
         }
-    
     },[event?.gasts]);
-
     const handleGuestAccept =()=>{
         setEvent(prevEvent => ({
             ...prevEvent,
@@ -55,7 +39,6 @@ export const SingleInvitationPage = ()=>{
                     gast._id === userInfo._id ? { ...gast, isJoinIn: 1 } : gast
             )
         }));
-
     };
     const handleGuestLaterDecide =()=>{
         setEvent(prevEvent => ({
@@ -80,7 +63,6 @@ export const SingleInvitationPage = ()=>{
                 }));
             }
         }
-
     }
     const handleGuestReject =()=>{
         setEvent(prevEvent => ({
@@ -107,7 +89,6 @@ export const SingleInvitationPage = ()=>{
         }
     };
     const handleComfirm = (taskId, clicked)=>{
-        // console.log("handleComfirm taskId", taskId);
         if(!clicked){
             setEvent(prevEvent => ({
                 ...prevEvent,
@@ -135,17 +116,12 @@ export const SingleInvitationPage = ()=>{
                 )
             }));       
         }
-
     }
-  
     const handleUpdateInvitation= async()=>{
         const updateInvitation = {};
-
         const guestReceived = receivedEvent.current.gasts.find(guest=>guest._id === userInfo._id);
         const guestUpdate = event.gasts.find(guest=>guest._id === userInfo._id);
         const tasksReceived = receivedEvent.current.tasks;
-        // console.log("tasksReceived",tasksReceived);
-
         const tasksUpdate = event.tasks;
         let sendUpdate = 0;
         switch (guestReceived.isJoinIn) {
@@ -219,7 +195,6 @@ export const SingleInvitationPage = ()=>{
                         const performerNew = task.performers.find(performer=>performer._id === userInfo._id);
                         const taskOld = tasksReceived.find(item=>item.id===task.id);
                         const performerOld = taskOld.performers.find(performer=>performer._id === userInfo._id);
-                        // console.log("compare",performerNew,performerOld);
                         if((performerNew && !performerOld) || (!performerNew && performerOld)){
                             tasks.push(task.id);
                             sendUpdate = 1; 
@@ -236,14 +211,10 @@ export const SingleInvitationPage = ()=>{
             default:
                 break;
         }
-        console.log("updateInvitation", updateInvitation);
         if(sendUpdate){
-            console.log("patch event")
             const result = await updateEventAsGuest(event._id, updateInvitation);
-            console.log("update result", result)
             const {updateCompleted} = result;
             if(updateCompleted){
-                console.log("setMessage")
                 setMessage("Deine Bestätigung der Einladung war erfolgreich.");
             }else{
                 setMessage("Deine Bestätigung der Einladung war nicht vollständig erfolgreich, möglicherweise haben andere schneller reagiert als du.");
@@ -254,7 +225,6 @@ export const SingleInvitationPage = ()=>{
     return (
         <div className="text-gray-500">
             {(event !== null && userInfo.isLogedin) && <EventContent event={event}></EventContent>}
-            {/* <p>{event.title}</p> */}
             <div className="bg-[#8FC1B5] w-full min-w-[400px] px-1 pb-6 mb-10 flex flex-col  items-center justify-center">
                 <div className="flex flex-col mt-4">
                     <div onClick={handleGuestReject}
@@ -270,15 +240,6 @@ export const SingleInvitationPage = ()=>{
                         {"Aufgaben :"}</p>
                     {tasksNeedToDo.map((task)=>(
                             <TaskComfirm key={task.id} task={task} handleComfirm={handleComfirm}></TaskComfirm>
-                            // <div key={task.title} className="flex flex-col m-4">
-                            // <div className="flex items-center justify-center">
-                            //     <p className="mr-4 text-[#2D4B73]">{task.title}</p>
-                            //     <div onClick={()=>handleComfirm(task.title)} className="border-[1px] w-[15px] h-[15px] border-gray-400 flex items-center justify-center hover:cursor-pointer hover:border-blue-500">
-                            //     {clicked && <FcCheckmark />}
-                            //     </div>
-                            // </div>
-                            // <p className="mr-4 text-[#2D4B73]">{task.description}</p>
-                            // </div>
                         ))
                     }
                     </div>

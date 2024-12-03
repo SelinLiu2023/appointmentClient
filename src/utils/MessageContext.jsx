@@ -1,7 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-
 export const MessageContext = createContext();
-
 export const MessageContextProvider = ({children})=>{
     const [message, setMessage] = useState("");
     useEffect(()=>{

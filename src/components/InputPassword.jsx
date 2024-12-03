@@ -1,11 +1,7 @@
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FiEye } from "react-icons/fi";
 import { useState } from 'react';
 import { IoEyeOffOutline } from "react-icons/io5";
 export const InputPassword = ({labelText, password, setPassword, setIsShowWarning})=>{
-    // const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const handleInputChange = (e)=>{
         setPassword(e.currentTarget.value);
@@ -22,7 +18,6 @@ export const InputPassword = ({labelText, password, setPassword, setIsShowWarnin
             name="password" 
             type={showPassword?"text":"password"}
             value={password} 
-            // disabled={isDisable}
             placeholder="Your password"
             required
             minLength="8"

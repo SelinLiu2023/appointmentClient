@@ -1,23 +1,25 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { InputPassword } from "../components/InputPassword";
 import { UserContext } from "../utils/UserContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
-
 export const LoginPage = ()=>{
-    const {userInfoDispatch} = useContext(UserContext);
+    const {userInfo, userInfoDispatch} = useContext(UserContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [warning,setWarning] = useState("");
-
     const navigator = useNavigate();
     const handleInputChange = (e)=>{
         setEmail(e.currentTarget.value);
     };
+    useEffect(()=>{
+        if(userInfo.isLogedin){
+            navigator(-1);
+        }
+    },[userInfo.isLogedin]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // 发送 POST 请求到登录 API
             const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {

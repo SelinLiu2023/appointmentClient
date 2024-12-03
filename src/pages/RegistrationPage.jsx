@@ -3,7 +3,6 @@ import { InputPassword } from "../components/InputPassword";
 import { UserContext } from "../utils/UserContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
-
 export const RegistrationPage = ()=>{
     const {userInfoDispatch} = useContext(UserContext);
     const [email, setEmail] = useState("");

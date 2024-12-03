@@ -6,7 +6,6 @@ export const Modal = ({children})=>{
                 className="absolute bottom-10 text-gray-400 hover:text-black">
                     Schließen
                 </button>
-
         </div>
     );
 }

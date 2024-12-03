@@ -16,34 +16,18 @@ export const SingleCreatedEvent = ()=>{
     const [evetEdited, setEventEdited] = useState(false);
     const [modalOn, setModalOn] = useState(false);
     const navigator = useNavigate();
-    // const {setMessage} = useContext(MessageContext);
     let receivedEvent = useRef(null);
-
-    // console.log("tasksNeedToDo",tasksNeedToDo)
     useEffect(()=>{
-        console.log("fetch event userInfo.isLogedin", userInfo.isLogedin);
+        //fetch this event from server
         if(event === null && userInfo.isLogedin){
-            // console.log("fetch event to go ");
-
             async function fetchEvents(id){
                 const response = await getEvent(id, userInfo._id);
                 setEvent(response);
                 receivedEvent.current = response;
-                console.log("receivedEvent.current",receivedEvent.current);
-
             }
             fetchEvents(id);
         }
     },[userInfo.isLogedin]);
-
-    // useEffect(()=>{
-    //     console.log("evetEdited", editEvent);
-    //     if(editEvent){
-    //         console.log("evetEdited", editEvent);
-
-    //         setModalOn(false);
-    //     }
-    // }, [evetEdited]);
     const handleEditEvent=()=>{
         setModalOn(true);
     };
@@ -54,7 +38,6 @@ export const SingleCreatedEvent = ()=>{
         console.log("setEventCreated", status);
         setEventEdited(true);
         setModalOn(false);
-
     }
     const handleUpdateEvent=async()=>{
         const result = await updateEventAsCreator(id,event);

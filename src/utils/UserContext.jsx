@@ -1,11 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
-
+import { getUser } from "./fetch.js";
 export const UserContext = createContext();
-
-const initUserInfo = {
+const initUserInfo = JSON.parse(sessionStorage.getItem('userInfo')) ||  {
     isLogedin: false,
     userName: "",
-
 }
 function reducer(state, action) {
     console.log("userInfo reducer payload", action.payload)
@@ -21,7 +19,7 @@ function reducer(state, action) {
                 ...state,
                 isLogedin: false 
             };
-        case "RESTORE_FROM_LOCALSTORAGE":
+        case "RESTORE_FROM_SESSIONSTORAGE":
             return {
                 ...action.payload
             };
@@ -35,31 +33,41 @@ function reducer(state, action) {
             return state;
     }
 }
-
-
 export const UserContextProvider = ({children})=>{
     const [userInfo, userInfoDispatch] = useReducer(reducer, initUserInfo);
     const contextValue = useMemo(() => ({ userInfo, userInfoDispatch }),
                                 [userInfo]);
-
     useEffect(()=>{
-        const localStorageItem = localStorage.getItem("userInfo");
-        if(localStorageItem){
-            const storedUserInfo = JSON.parse(localStorageItem);
-            userInfoDispatch({type: "RESTORE_FROM_LOCALSTORAGE", payload: storedUserInfo});
+        const sessionStorageItem = sessionStorage.getItem("userInfo");
+        if(sessionStorageItem){
+            const storedUserInfo = JSON.parse(sessionStorageItem);
+            userInfoDispatch({type: "RESTORE_FROM_SESSIONSTORAGE", payload: storedUserInfo});
         }
-
-    },[]);
-    useEffect(()=>{
-        console.log("localStorage userInfo ", userInfo)
         if(userInfo.isLogedin){
-            // localStorage.removeItem("userInfo");
-            localStorage.setItem("userInfo", JSON.stringify(userInfo));
-
+            async function fetchUser(){
+                try {
+                    const response = await getUser(userInfo._id);
+                    console.log("response", response)
+                    userInfoDispatch({ type: 'UPDATE_FETCH', payload: response});
+                } catch (error) {
+                    console.error('Failed to fetch user:', error);
+                }
+            }
+            const intervalId = setInterval(() => {
+                console.log("更新用户数据");
+                fetchUser();
+              }, 15000);  // 每15秒更新一次
+            return () => clearInterval(intervalId); 
+        }    
+    },[userInfo.isLogedin]);
+    useEffect(()=>{
+        console.log("sessionStorage userInfo ", userInfo)
+        if(userInfo.isLogedin){
+            // sessionStorage.removeItem("userInfo");
+            sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
         }else{
-            localStorage.removeItem("userInfo");
+            sessionStorage.removeItem("userInfo");
         }
-
     }, [userInfo]);
     
     return (

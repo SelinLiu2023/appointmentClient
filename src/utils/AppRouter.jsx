@@ -7,7 +7,6 @@ import { SingleInvitationPage } from "../pages/SingleInvitationPage";
 import { MainPage } from "../pages/MainPage";
 import { AuthGuardPage } from "../pages/AuthGuardPage";
 import { CreateNewAppointmentPage } from "../pages/CreateNewAppointmentPage";
-import { GroupsPage } from "../pages/GroupsPage";
 import { SingleCreatedEvent } from "../pages/SingleCreatedEvent";
 import { MyCreatedEventsPage } from "../pages/MyCreatedEventsPage";
 import { MyReceivedInvitationsPage } from "../pages/MyReceivedInvitationsPage";
@@ -62,12 +61,6 @@ export const AppRouter = createBrowserRouter([
                         ),
                         path: "invitation/:id",
                     }, 
-                    {
-                        element: (
-                            <GroupsPage />
-                        ),
-                        path: "groups",
-                    },              
                 ]
             },
         ]

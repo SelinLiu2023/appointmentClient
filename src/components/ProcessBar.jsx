@@ -1,5 +1,4 @@
 import "../styles.css";
-
 export const ProcessBar = ({step, totalSteps})=>{
     const stepsArr = Array.from({ length: totalSteps }, (_, index) => index + 1);
     return (

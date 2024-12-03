@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { FcCheckmark } from "react-icons/fc";
 import { UserContext } from "../utils/UserContext";
-
 export const UserListItem = ({event, setEvent})=>{
     const {userInfo} = useContext(UserContext);
     const [clicked, setClicked] = useState(confirmed);
@@ -10,7 +8,6 @@ export const UserListItem = ({event, setEvent})=>{
     if(event.gasts.find(guest=>guest._id === _id)){
         setInvited(true);
     }
-    
     const handleComfirm = ()=>{
         setClicked(prev=>!prev);
         if(!clicked){
@@ -31,16 +28,8 @@ export const UserListItem = ({event, setEvent})=>{
             }));
         }
     };
-    useEffect(()=>{
-        console.log("gasts",setNewAppointment)
-  
-    },[setNewAppointment.gasts]);
     return (
         <div className="flex flex-row items-center justify-cente">
-            {/* <label htmlFor="gastName"
-                className='p-2 m-2 w-[320px] text-left text-gray-700'>
-                    <p>Name</p>
-            </label> */}
             <p className='text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-b border-[#2D4B73]'>
                 {user.userName}
             </p>
