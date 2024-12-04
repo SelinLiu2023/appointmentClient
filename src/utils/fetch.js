@@ -134,3 +134,92 @@ export const getUser= async (userId)=>{
         console.log(error)
     }
 }
+export const createDraft= async (data)=>{
+    try {
+        const response = await fetch(`${SERVER_URL}/draft`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...data
+            }),
+        });
+        if (response.ok) {
+            return true;
+        } else {
+            const error = await response.json();
+            console.log("fetchUser fail",error.message)
+            return false;
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getDraft = async (id)=>{
+    try {
+        console.log("getEvents id",id)
+        const response = await fetch(`${SERVER_URL}/draft/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log("getEvents response", response);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            const error = await response.json();
+            console.log("get event fail",error.message)
+        }
+    } catch (error) {
+        console.log("getEvents, error", error)
+    }
+}
+export const updateDraft = async (id, data)=>{
+    try {
+        console.log("getEvents id",id)
+        const response = await fetch(`${SERVER_URL}/draft/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...data
+            }),
+        });
+        console.log("updateDraft response", response);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            const error = await response.json();
+            console.log("get event fail",error.message)
+        }
+    } catch (error) {
+        console.log("getEvents, error", error)
+    }
+};
+
+export const deleteDraft = async (id)=>{
+    try {
+        console.log("getEvents id",id)
+        const response = await fetch(`${SERVER_URL}/draft/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log("getEvents response", response);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            const error = await response.json();
+            console.log("get event fail",error.message)
+        }
+    } catch (error) {
+        console.log("getEvents, error", error)
+    }
+}

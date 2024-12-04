@@ -10,10 +10,6 @@ export const EventItem = ({event})=>{
         }else{
             setStatusFlag("readed");
         }
-        console.log("event.status",event.status)
-        console.log("event.isRead",event.isRead)
-        console.log("statusFlag",statusFlag)
-
     },[event]);
     const EventStatus=()=>{
         if(statusFlag === "updated"){

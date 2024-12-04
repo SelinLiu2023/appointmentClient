@@ -5,6 +5,8 @@ import { ModifyEvent } from '../components/ModifyEvent';
 import { EventContent } from '../components/EventContent';
 import { MessageContext } from '../utils/MessageContext';
 import { postNewEvent } from "../utils/fetch.js";
+import { createDraft } from "../utils/fetch.js";
+
 export const CreateNewAppointmentPage = () => {
     const {userInfo} = useContext(UserContext);
     const {setMessage} = useContext(MessageContext);
@@ -47,9 +49,9 @@ export const CreateNewAppointmentPage = () => {
         const result = await postNewEvent(newAppointment);
         //this message will be shown on the top
         if(result){
-            setMessage("Einladung erfolgreich.")
+            setMessage("Einladung schicken erfolgreich.")
         }else{
-            setMessage("Einladung fehlgeschlagen.");
+            setMessage("Einladung schicken fehlgeschlagen.");
         }
         navigator(`/main`);
     }
@@ -57,6 +59,19 @@ export const CreateNewAppointmentPage = () => {
         // user finished a event, but doesn't want to send it. Click "schließen" button.
         navigator(`/main`);
     }
+    const handleSaveDraft =async()=>{
+        try {
+            const result = await createDraft(newAppointment);
+            if(result){
+                setMessage("Einladung speichern erfolgreich.")
+            }else{
+                setMessage("Einladung speichern fehlgeschlagen.");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        navigator(`/main`);
+    };
     return (
         <div className='flex flex-col'>
             {
@@ -67,7 +82,9 @@ export const CreateNewAppointmentPage = () => {
                 <>
                 <EventContent event ={newAppointment}></EventContent>
                 <button onClick={handleAddEvent}
-                    className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center hover:text-white'>Bestätigen</button>
+                    className='bg-[#F2B33D] text-gray-700 p-2 rounded mt-10 min-w-[100px] text-center hover:text-white'>Bestätigen und Schicken</button>
+                <button onClick={handleSaveDraft}
+                    className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center hover:text-gray-400'>speichern ohne Schicken</button>                
                 <button onClick={handleQuit}
                     className='bg-[#2D4B73] text-white p-2 rounded mt-10 min-w-[100px] text-center hover:text-gray-400'>Schließen</button>
                 </>

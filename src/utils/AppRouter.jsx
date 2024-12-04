@@ -10,6 +10,8 @@ import { CreateNewAppointmentPage } from "../pages/CreateNewAppointmentPage";
 import { SingleCreatedEvent } from "../pages/SingleCreatedEvent";
 import { MyCreatedEventsPage } from "../pages/MyCreatedEventsPage";
 import { MyReceivedInvitationsPage } from "../pages/MyReceivedInvitationsPage";
+import { MySavedDraftsPage } from "../pages/MySavedDraftsPage";
+import { SingleDraftPage } from "../pages/SingleDraftPage";
 
 export const AppRouter = createBrowserRouter([
     {
@@ -51,6 +53,12 @@ export const AppRouter = createBrowserRouter([
                     },
                     {
                         element: (
+                            <MySavedDraftsPage />
+                        ),
+                        path: "mydrafts",
+                    },
+                    {
+                        element: (
                             <SingleCreatedEvent />
                         ),
                         path: "event/:id",
@@ -61,6 +69,12 @@ export const AppRouter = createBrowserRouter([
                         ),
                         path: "invitation/:id",
                     }, 
+                    {
+                        element: (
+                            <SingleDraftPage />
+                        ),
+                        path: "draft/:id",
+                    },
                 ]
             },
         ]
