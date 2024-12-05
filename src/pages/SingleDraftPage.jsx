@@ -59,6 +59,16 @@ export const SingleDraftPage = ()=>{
         await deleteDraft(id);
         navigator(`/main`);
     }
+    const handleDeleteDraft =async()=>{
+        const result = await deleteDraft(id);
+
+        if(result){
+            setMessage("Einladung löschen erfolgreich.")
+        }else{
+            setMessage("Einladung löschen fehlgeschlagen.");
+        }
+        navigator(`/main`);
+    }
     return(
     <div className="flex flex-col">
         <div className="mb-10">
@@ -70,6 +80,8 @@ export const SingleDraftPage = ()=>{
         </div>
         <button onClick={handleEditDraft}
                 className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Ändern</button>
+        <button onClick={handleDeleteDraft}
+                className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Löschen</button>
         <button onClick={handleQuit}
         className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Schließen</button>
         {evetEdited ?

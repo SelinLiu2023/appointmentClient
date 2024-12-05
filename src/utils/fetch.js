@@ -113,6 +113,33 @@ export const updateEventAsCreator = async (id, event)=>{
         console.log("update event, error", error)
     }
 }
+export const cancelEvent = async (id, event)=>{
+    try {
+        event.status = -1;
+        console.log("updateEventAsCreator id",id)
+        console.log("updateEventAsCreator event",event)
+        const response = await fetch(`${SERVER_URL}/event/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...event,
+            }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log("updateEventAsGuest response",data)
+            return true;
+        } else {
+            const error = await response.json();
+            console.log("update event fail",error.message)
+            return false;
+        }
+    } catch (error) {
+        console.log("update event, error", error)
+    }
+}
 export const getUser= async (userId)=>{
     try {
         const response = await fetch(`${SERVER_URL}/user/${userId}`, {

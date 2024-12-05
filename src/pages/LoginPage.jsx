@@ -12,11 +12,11 @@ export const LoginPage = ()=>{
     const handleInputChange = (e)=>{
         setEmail(e.currentTarget.value);
     };
-    useEffect(()=>{
-        if(userInfo.isLogedin){
-            navigator(-1);
-        }
-    },[userInfo.isLogedin]);
+    // useEffect(()=>{
+    //     if(userInfo.isLogedin){
+    //         navigator(-1);
+    //     }
+    // },[userInfo.isLogedin]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

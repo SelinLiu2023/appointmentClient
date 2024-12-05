@@ -4,7 +4,7 @@ import { getEvent } from "../utils/fetch.js";
 import { UserContext } from "../utils/UserContext";
 import { EventContent } from "../components/EventContent.jsx";
 import { ModifyEvent } from "../components/ModifyEvent.jsx";
-import { updateEventAsCreator } from "../utils/fetch.js";
+import { updateEventAsCreator, cancelEvent } from "../utils/fetch.js";
 import { MessageContext } from "../utils/MessageContext.jsx";
 export const SingleCreatedEvent = ()=>{
     const {userInfo} = useContext(UserContext);
@@ -48,6 +48,15 @@ export const SingleCreatedEvent = ()=>{
         }
         navigator(`/main`);
     }
+    const handleCancel = async()=>{
+        const result = await cancelEvent(id,event);
+        if(result){
+            setMessage("Einladung erfolgreich.")
+        }else{
+            setMessage("Einladung fehlgeschlagen.");
+        }
+        navigator(`/main`);
+    };
     return(
     <div>
         {(event !== null && userInfo.isLogedin) &&<EventContent event={event}></EventContent>}
@@ -55,14 +64,20 @@ export const SingleCreatedEvent = ()=>{
             modalOn && 
             <ModifyEvent newAppointment={event} setNewAppointment={setEvent} setEventCreated={setEventCreated} setModalOn={setModalOn}></ModifyEvent>
         }
-        <button onClick={handleEditEvent}
-                className='bg-[#2D4B73] text-white p-2 rounded m-6 min-w-[100px] text-center '>Ändern</button>
-        <button onClick={handleQuit}
-        className='bg-[#2D4B73] text-white p-2 rounded m-6 min-w-[100px] text-center '>Schließen</button>
-        {evetEdited &&
-            <button onClick={handleUpdateEvent}
-            className='bg-[#F2B33D] text-white p-2 rounded m-6 min-w-[100px] text-center '>Beschädigen</button>
-    }
+        { event?.status !== -1 &&
+        <div>
+            <button onClick={handleEditEvent}
+                    className='bg-[#2D4B73] text-white p-2 rounded m-6 min-w-[100px] text-center '>Ändern</button>
+            <button onClick={handleQuit}
+            className='bg-[#2D4B73] text-white p-2 rounded m-6 min-w-[100px] text-center '>Schließen</button>
+            <button onClick={handleCancel}
+            className='bg-[#2D4B73] text-white p-2 rounded m-6 min-w-[100px] text-center '>Cancel und Schicken</button>
+            {evetEdited &&
+                <button onClick={handleUpdateEvent}
+                className='bg-[#F2B33D] text-white p-2 rounded m-6 min-w-[100px] text-center '>Beschädigen und Schicken</button>
+            }
+        </div>
+        }
     </div>
     );
 }

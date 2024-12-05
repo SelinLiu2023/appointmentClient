@@ -225,29 +225,30 @@ export const SingleInvitationPage = ()=>{
     return (
         <div className="text-gray-500">
             {(event !== null && userInfo.isLogedin) && <EventContent event={event}></EventContent>}
-            <div className="bg-[#8FC1B5] w-full min-w-[400px] px-1 pb-6 mb-10 flex flex-col  items-center justify-center">
-                <div className="flex flex-col mt-4">
-                    <div onClick={handleGuestReject}
-                    className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center '>Event Anlehnen</div>
-                    <div onClick={handleGuestAccept}
-                    className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center'>Event Annehmen</div>
-                    <div onClick={handleGuestLaterDecide}
-                    className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center'>Später Entscheiden</div>
-                </div>
-                {tasksNeedToDo.length >0 &&
-                    <div>
-                    <p className='mt-10 border-b border-black'>
-                        {"Aufgaben :"}</p>
-                    {tasksNeedToDo.map((task)=>(
-                            <TaskComfirm key={task.id} task={task} handleComfirm={handleComfirm}></TaskComfirm>
-                        ))
-                    }
+            { event?.status !== -1 &&           
+                <div className="bg-[#8FC1B5] w-full min-w-[400px] px-1 pb-6 mb-10 flex flex-col  items-center justify-center">
+                    <div className="flex flex-col mt-4">
+                        <div onClick={handleGuestReject}
+                        className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center '>Event Anlehnen</div>
+                        <div onClick={handleGuestAccept}
+                        className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center'>Event Annehmen</div>
+                        <div onClick={handleGuestLaterDecide}
+                        className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center'>Später Entscheiden</div>
                     </div>
-                }
-                <button onClick={handleUpdateInvitation}
-                className='bg-[#F2B33D] text-gray-700 p-2 rounded m-6 min-w-[100px] text-center '>Bestätigen</button>
-            </div>
+                    {tasksNeedToDo.length >0 &&
+                        <div>
+                        <p className='mt-10 border-b border-black'>
+                            {"Aufgaben :"}</p>
+                        {tasksNeedToDo.map((task)=>(
+                                <TaskComfirm key={task.id} task={task} handleComfirm={handleComfirm}></TaskComfirm>
+                            ))
+                        }
+                        </div>
+                    }
+                    <button onClick={handleUpdateInvitation}
+                    className='bg-[#F2B33D] text-gray-700 p-2 rounded m-6 min-w-[100px] text-center '>Bestätigen</button>
+                </div>
+            }        
         </div>
-        
     );
 };
