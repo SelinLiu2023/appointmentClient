@@ -29,7 +29,7 @@ export const EventItem = ({event})=>{
         }
     }
     return (
-        <NavLink to={`/event/${event._id}`} className="text-gray-500 p-2 m-2 mb-4 text-left border-gray-300 border-[#03588C] w-[300px] my-4">
+        <NavLink to={`/event/${event._id}`} className="text-gray-500 hover:text-gray-700 p-2 m-2 mb-4 text-left border-gray-300 border-[#03588C] w-[300px] my-4">
             <div className="text-2xl my-4  flex ">
                 <p className={`${canceled ? "line-through text-gray-400" : "text-[#2D4B73"}`}>{event.title}</p>
                 <EventStatus></EventStatus>

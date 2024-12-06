@@ -8,6 +8,7 @@ import { Description } from "../components/Description";
 import { Gasts } from "../components/Gasts";
 import { Title } from '../components/Title';
 import { Tasks } from '../components/Tasks';
+import { IoClose } from "react-icons/io5";
 
 export const ModifyEvent =({newAppointment, setNewAppointment, setEventCreated, setModalOn})=>{
     const [gotoNextStep, setGotoNextStep] = useState(false);
@@ -48,8 +49,8 @@ export const ModifyEvent =({newAppointment, setNewAppointment, setEventCreated, 
             className="relative w-3/4 max-w-xl h-3/4 flex flex-col justify-center items-center bg-gray-100 p-6 rounded-lg shadow-md"
             >
                 <button onClick={closeModel} 
-                className="absolute top-3 right-3 text-gray-400 hover:text-black">
-                    X
+                className="absolute top-3 right-3 text-gray-400 hover:text-black text-lg">
+                    <IoClose />
                 </button>
                 <div  className="overflow-auto">
                     {step === 1 && <Title newAppointment={newAppointment} setNewAppointment={setNewAppointment} gotoNextStep={gotoNextStep} setStepCompleted={setStepCompleted} setGotoNextStep={setGotoNextStep}></Title>}

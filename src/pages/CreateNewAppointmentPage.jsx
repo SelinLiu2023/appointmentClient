@@ -49,9 +49,9 @@ export const CreateNewAppointmentPage = () => {
         const result = await postNewEvent(newAppointment);
         //this message will be shown on the top
         if(result){
-            setMessage("Einladung schicken erfolgreich.")
+            setMessage({text:"Einladung schicken erfolgreich.",isSuccess:true });
         }else{
-            setMessage("Einladung schicken fehlgeschlagen.");
+            setMessage({text:"Einladung schicken fehlgeschlagen.",isSuccess:true });
         }
         navigator(`/main`);
     }
@@ -63,9 +63,9 @@ export const CreateNewAppointmentPage = () => {
         try {
             const result = await createDraft(newAppointment);
             if(result){
-                setMessage("Einladung speichern erfolgreich.")
+                setMessage({text:"Einladung speichern erfolgreich.",isSuccess:true })
             }else{
-                setMessage("Einladung speichern fehlgeschlagen.");
+                setMessage({text:"Einladung speichern fehlgeschlagen.",isSuccess:false });
             }
         } catch (error) {
             console.log(error);

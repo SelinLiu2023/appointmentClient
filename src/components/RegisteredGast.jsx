@@ -27,9 +27,9 @@ export const RegisteredGast = ({newAppointment,setNewAppointment})=>{
                         value={nameInput}
                         placeholder="User name"
                         onChange={e=>setNameInput(e.currentTarget.value)}/>
-                <div onClick={handleSearchUser}>
+                <button onClick={handleSearchUser} className="hover:text-black">
                     <FcSearch />
-                </div>
+                </button>
             </div>
             {
                 registeredGastList.map((item)=>(

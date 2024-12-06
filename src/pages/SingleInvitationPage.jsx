@@ -5,6 +5,7 @@ import { EventContent } from "../components/EventContent";
 import { useNavigate, useParams } from "react-router-dom";
 import { TaskComfirm } from "../components/TaskComfirm.jsx";
 import { MessageContext } from "../utils/MessageContext.jsx";
+import { IoClose } from "react-icons/io5";
 export const SingleInvitationPage = ()=>{
     const {userInfo} = useContext(UserContext);
     const [event, setEvent] = useState(null);
@@ -12,6 +13,7 @@ export const SingleInvitationPage = ()=>{
     const [tasksNeedToDo, setTasksNeedToDo] = useState([]);
     const navigator = useNavigate();
     const {setMessage} = useContext(MessageContext);
+    const [showOnlyContext, setShowOnlyContext] = useState(false);
     let receivedEvent = useRef(null);
     useEffect(()=>{
         if(event === null && userInfo.isLogedin){
@@ -32,6 +34,15 @@ export const SingleInvitationPage = ()=>{
             }        
         }
     },[event?.gasts]);
+    useEffect(()=>{
+        const today = new Date();
+        if(event && new Date(event.endTime )< today){
+            setShowOnlyContext(true);
+        }
+        else{
+            setShowOnlyContext(false);
+        }
+        },[event?.endTime]);
     const handleGuestAccept =()=>{
         setEvent(prevEvent => ({
             ...prevEvent,
@@ -214,26 +225,31 @@ export const SingleInvitationPage = ()=>{
         if(sendUpdate){
             const result = await updateEventAsGuest(event._id, updateInvitation);
             const {updateCompleted} = result;
+            console.log("updateCompleted",updateCompleted)
             if(updateCompleted){
-                setMessage("Deine Bestätigung der Einladung war erfolgreich.");
+                setMessage({text:  "Deine Bestätigung der Einladung war erfolgreich.", isSuccess: true});
             }else{
-                setMessage("Deine Bestätigung der Einladung war nicht vollständig erfolgreich, möglicherweise haben andere schneller reagiert als du.");
+                setMessage({text:  "Deine Bestätigung der Einladung war nicht vollständig erfolgreich, möglicherweise haben andere schneller reagiert als du.", isSuccess: false});
             }
         }
         navigator("/myinvitations");
     };
+    const handleQuit = ()=>{
+        navigator(`/myinvitations`);
+    }
+
     return (
-        <div className="text-gray-500">
+        <div className="text-gray-500 flex flex-col relative">
             {(event !== null && userInfo.isLogedin) && <EventContent event={event}></EventContent>}
-            { event?.status !== -1 &&           
+            { (event?.status !== -1 && !showOnlyContext)&&           
                 <div className="bg-[#8FC1B5] w-full min-w-[400px] px-1 pb-6 mb-10 flex flex-col  items-center justify-center">
-                    <div className="flex flex-col mt-4">
-                        <div onClick={handleGuestReject}
-                        className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center '>Event Anlehnen</div>
-                        <div onClick={handleGuestAccept}
-                        className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center'>Event Annehmen</div>
-                        <div onClick={handleGuestLaterDecide}
-                        className='bg-[#2D4B73] text-white p-2 rounded m-1 min-w-150 text-center'>Später Entscheiden</div>
+                    <div className="flex flex-col mt-4 text-gray-300">
+                        <button onClick={handleGuestReject}
+                        className='bg-[#2D4B73] hover:text-white p-2 rounded m-1 min-w-150 text-center '>Event Anlehnen</button>
+                        <button onClick={handleGuestAccept}
+                        className='bg-[#2D4B73] hover:text-white p-2 rounded m-1 min-w-150 text-center'>Event Annehmen</button>
+                        <button onClick={handleGuestLaterDecide}
+                        className='bg-[#2D4B73] hover:text-white p-2 rounded m-1 min-w-150 text-center'>Später Entscheiden</button>
                     </div>
                     {tasksNeedToDo.length >0 &&
                         <div>
@@ -246,9 +262,11 @@ export const SingleInvitationPage = ()=>{
                         </div>
                     }
                     <button onClick={handleUpdateInvitation}
-                    className='bg-[#F2B33D] text-gray-700 p-2 rounded m-6 min-w-[100px] text-center '>Bestätigen</button>
+                    className='bg-[#F2B33D] hover:text-gray-700 p-2 rounded m-6 min-w-[100px] text-center '>Beschädigen und Schicken</button>
                 </div>
-            }        
+            }      
+            <button onClick={handleQuit}
+            className='absolute top-0 right-[-90px] w-[20px] h-[20px] border-[1px] border-gray-400 flex justify-center items-center hover:text-gray-700'><IoClose /></button>  
         </div>
     );
 };

@@ -11,19 +11,19 @@ export const LayoutPage = ()=>{
     const {message, setMessage} = useContext(MessageContext);
     const [showMessage, setShowMessage] = useState(true);
     useEffect(()=>{
-        if (message === "") {
+        if (message.text === "") {
             setShowMessage(false);
             return;
         }
         setShowMessage(true);
         const timer = setTimeout(() => {
             setShowMessage(false);
-            setMessage("");
+            setMessage({text:"", isSuccess:false});
         }, 10000);
         return(()=>{
             if(timer) clearTimeout(timer);
         })
-    },[message]);
+    },[message.text]);
 
     // click outside area will close the menu
     useEffect(() => {
@@ -48,7 +48,7 @@ export const LayoutPage = ()=>{
         navigator("/");
     }
     return (
-        <div>
+        <div className="relative w-full ">
             <header className="relative flex flex-row p-2 justify-center items-center bg-[#99B4BF]">
             <div className="mr-4 text-[#253C59] italic">{userInfo.userName}</div>
             <button
@@ -79,16 +79,21 @@ export const LayoutPage = ()=>{
                 <ul className="flex flex-col p-2">
                     <NavLink to={"/newappointment"}
                     className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Ein neues Event Erstellen</NavLink>
+
+                    <NavLink to={"/mydrafts"}
+                    className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Gespeicherter Einladungsentwurf</NavLink>
+                    
                     <NavLink to={"/myevents"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Erstellte Events</NavLink>
                     <NavLink to={"/myinvitations"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Eingegangene Einladungen</NavLink>
                     <li onClick={handleLogout} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Log out</li>
                 </ul>
             </div>
-            </header>
             {showMessage && 
-                <header className=" bg-[#F2762E] italic text-white absolute top-20 w-full sm:w-3/5">
-                    <p className="p-1">{message}</p>
-                </header>}
+                <div className={` ${message.isSuccess ? "bg-[#8FC1B5]" : "bg-[#F2762E]"} italic text-white absolute top-12 w-full`}>
+                    <p className="p-1 w-full animate-slide-in whitespace-nowrap">{message.text}</p>
+                </div>}
+            </header>
+
             <main className="pt-12 flex flex-col justify-center items-center">
                 <Outlet></Outlet>
             </main>

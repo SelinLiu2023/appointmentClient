@@ -6,6 +6,8 @@ import { EventContent } from "../components/EventContent.jsx";
 import { ModifyEvent } from "../components/ModifyEvent.jsx";
 import { updateEventAsCreator } from "../utils/fetch.js";
 import { MessageContext } from "../utils/MessageContext.jsx";
+import { IoClose } from "react-icons/io5";
+
 export const SingleDraftPage = ()=>{
     const {userInfo} = useContext(UserContext);
     const {setMessage} = useContext(MessageContext);
@@ -42,9 +44,9 @@ export const SingleDraftPage = ()=>{
     const handleSaveDraft = async()=>{
         const result = await updateDraft(id, event);
         if(result){
-            setMessage("Einladung speichern erfolgreich.")
+            setMessage({text:"Einladung speichern erfolgreich.", isSuccess: true} )
         }else{
-            setMessage("Einladung speichern fehlgeschlagen.");
+            setMessage({text: "Einladung speichern fehlgeschlagen.", isSuccess: false} );
         }
         navigator(`/main`);
     }
@@ -52,9 +54,9 @@ export const SingleDraftPage = ()=>{
         const result = await postNewEvent(event);
 
         if(result){
-            setMessage("Einladung erneuern erfolgreich.")
+            setMessage({text:"Einladung erneuern erfolgreich." , isSuccess: true} )
         }else{
-            setMessage("Einladung erneuern fehlgeschlagen.");
+            setMessage({text: "Einladung erneuern fehlgeschlagen.", isSuccess: false} );
         }
         await deleteDraft(id);
         navigator(`/main`);
@@ -63,14 +65,14 @@ export const SingleDraftPage = ()=>{
         const result = await deleteDraft(id);
 
         if(result){
-            setMessage("Einladung löschen erfolgreich.")
+            setMessage({text: "Einladung löschen erfolgreich.", isSuccess: true} )
         }else{
-            setMessage("Einladung löschen fehlgeschlagen.");
+            setMessage({text:"Einladung löschen fehlgeschlagen.", isSuccess: false } );
         }
         navigator(`/main`);
     }
     return(
-    <div className="flex flex-col">
+    <div className="flex flex-col relative text-gray-500">
         <div className="mb-10">
             {(event !== null && userInfo.isLogedin) &&<EventContent event={event}></EventContent>}
             {
@@ -79,23 +81,25 @@ export const SingleDraftPage = ()=>{
             }
         </div>
         <button onClick={handleEditDraft}
-                className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Ändern</button>
+                className='bg-[#2D4B73] w-[250px] text-gray-300 hover:text-white p-2 rounded m-2 min-w-[100px] text-center '>Ändern</button>
         <button onClick={handleDeleteDraft}
-                className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Löschen</button>
-        <button onClick={handleQuit}
-        className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Schließen</button>
+                className='bg-[#2D4B73] w-[250px] text-gray-300 hover:text-white p-2 rounded m-2 min-w-[100px] text-center '>Löschen</button>
+        {/* <button onClick={handleQuit}
+        className='bg-[#2D4B73] w-[250px] text-gray-300 hover:text-white p-2 rounded m-2 min-w-[100px] text-center '>Schließen</button> */}
         {evetEdited ?
             <div className="flex flex-col">
             <button onClick={handleSaveDraft}
-            className='bg-[#2D4B73] w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Speichern ohne Schicken</button>                
+            className='bg-[#2D4B73] w-[250px] text-gray-300 hover:text-white p-2 rounded m-2 min-w-[100px] text-center '>Speichern ohne Schicken</button>                
             <button onClick={handleSendDraft}
-                className='bg-[#F2B33D]  w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Beschädigen und Schicken</button>
+                className='bg-[#F2B33D]  w-[250px] text-gray-300 hover:text-gray-700 p-2 rounded m-2 min-w-[100px] text-center '>Beschädigen und Schicken</button>
             </div>  :
             <div>
                 <button onClick={handleSendDraft}
-                className='bg-[#F2B33D]  w-[250px] text-white p-2 rounded m-2 min-w-[100px] text-center '>Beschädigen und Schicken</button>
+                className='bg-[#F2B33D]  w-[250px] text-gray-300 hover:text-gray-700 text-white p-2 rounded m-2 min-w-[100px] text-center '>Beschädigen und Schicken</button>
             </div>
         }
+                    <button onClick={handleQuit}
+            className='absolute top-0 right-[-90px] w-[20px] h-[20px] border-[1px] border-gray-400 flex justify-center items-center hover:text-gray-700'><IoClose /></button>  
     </div>
     );
 }

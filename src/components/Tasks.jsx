@@ -90,7 +90,7 @@ export const Tasks = ({newAppointment, setNewAppointment,gotoNextStep,setStepCom
                 className='text-gray-900 p-2 m-2 mb-4 text-left border-gray-300 border-[#2D4B73]'/>
             </div>
             {totalSteps === 6 && 
-                <button onClick={handleSetEvent} className='bg-[#2D4B73] text-white p-2 rounded m-6 text-center '>Erstellen</button>}
+                <button onClick={handleSetEvent} className='bg-[#2D4B73] text-gray-300 hover:text-white p-2 rounded m-6 text-center '>Erstellen</button>}
         </div>
     );
 };
