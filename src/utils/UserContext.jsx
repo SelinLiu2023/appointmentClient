@@ -53,11 +53,11 @@ export const UserContextProvider = ({children})=>{
                     console.error('Failed to fetch user:', error);
                 }
             }
-            // const intervalId = setInterval(() => {
-            //     console.log("更新用户数据");
-            //     fetchUser();
-            //   }, 15000);  // 每15秒更新一次
-            // return () => clearInterval(intervalId); 
+            const intervalId = setInterval(() => {
+                console.log("更新用户数据");
+                fetchUser();
+              }, 15000);  // 每15秒更新一次
+            return () => clearInterval(intervalId); 
         }    
     },[userInfo.isLogedin]);
     useEffect(()=>{

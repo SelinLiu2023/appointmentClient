@@ -2,13 +2,14 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../utils/UserContext";
 import { useContext, useState ,useRef, useEffect} from "react";
 import { MessageContext } from "../utils/MessageContext";
+import { FcAnswers } from "react-icons/fc";
 export const LayoutPage = ()=>{
     const {userInfo, userInfoDispatch} = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null); 
     const buttonRef = useRef(null);
     const navigator = useNavigate();
-    const {message, setMessage} = useContext(MessageContext);
+    const {message, setMessage, eventNewStatus, invitationNewStatus} = useContext(MessageContext);
     const [showMessage, setShowMessage] = useState(true);
     useEffect(()=>{
         if (message.text === "") {
@@ -54,7 +55,7 @@ export const LayoutPage = ()=>{
             <button
                 ref={buttonRef}
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="flex items-center justify-center w-8 h-8 bg-gray-700 text-white rounded-md focus:outline-none">
+                className="flex items-center justify-center w-8 h-8 bg-gray-700 text-white rounded-md focus:outline-none relative">
                 <div className="space-y-1">
                     <span
                         className={`block h-[2px] w-6 bg-white transform transition-transform duration-300 ${
@@ -72,6 +73,11 @@ export const LayoutPage = ()=>{
                         }`}
                     ></span>
                 </div>
+                {(eventNewStatus || invitationNewStatus )&& 
+                    <div className="absolute top-0 w-4 h-4 rounded-full z-50">
+                        <FcAnswers />
+                    </div>
+                }
             </button>
             <div ref={menuRef}
                 className={`absolute z-50 top-10 mt-2 mb-2  w-70 bg-white border border-gray-300 rounded-md shadow-lg overflow-hidden transition-all duration-300 ${
@@ -83,8 +89,18 @@ export const LayoutPage = ()=>{
                     <NavLink to={"/mydrafts"}
                     className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Gespeicherter Einladungsentwurf</NavLink>
                     
-                    <NavLink to={"/myevents"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Erstellte Events</NavLink>
-                    <NavLink to={"/myinvitations"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Eingegangene Einladungen</NavLink>
+                    <NavLink to={"/myevents"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer flex">Erstellte Events
+                    {eventNewStatus && 
+                    <div className="w-4 h-4 rounded-full">
+                        <FcAnswers />
+                    </div>
+                    }</NavLink>
+                    <NavLink to={"/myinvitations"} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer flex">Eingegangene Einladungen
+                    {invitationNewStatus && 
+                    <div className="w-4 h-4 rounded-full">
+                        <FcAnswers />
+                    </div>
+                    }</NavLink>
                     <li onClick={handleLogout} className="py-2 px-4 text-gray-400 hover:bg-gray-100 hover:text-gray-900 cursor-pointer">Log out</li>
                 </ul>
             </div>

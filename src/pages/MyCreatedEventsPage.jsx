@@ -9,22 +9,40 @@ export const MyCreatedEventsPage =()=>{
     const [showOldEvents, setShowOldEvents] = useState(false);
     useEffect(()=>{
         if(userInfo.isLogedin){
-            async function fetchUser(){
-                const response = await getUser(userInfo._id);
-                console.log("response", response)
-                userInfoDispatch({ type: 'UPDATE_FETCH', payload: response});
+            // async function fetchUser(){
+            //     const response = await getUser(userInfo._id);
+            //     console.log("response", response)
+            //     userInfoDispatch({ type: 'UPDATE_FETCH', payload: response});
                 //sort the event by _id(as created time)
                 const totay = new Date();
-                setCurrentEvents(response.createdEvents.filter(item=>new Date(item.endTime) >= totay).sort((a, b) => {
+                setCurrentEvents(userInfo.createdEvents.filter(item=>new Date(item.endTime) >= totay).sort((a, b) => {
                     return b._id.localeCompare(a._id);
                 }));
-                setOldEvents(response.createdEvents.filter(item=>new Date(item.endTime) < totay).sort((a, b) => {
+                setOldEvents(userInfo.createdEvents.filter(item=>new Date(item.endTime) < totay).sort((a, b) => {
                     return b._id.localeCompare(a._id);
                 }));
-            }
-            fetchUser();
+            // }
+            // fetchUser();
         }
-    },[userInfo.isLogedin]);
+    },[userInfo]);
+    // useEffect(()=>{
+    //     if(userInfo.isLogedin){
+    //         async function fetchUser(){
+    //             const response = await getUser(userInfo._id);
+    //             console.log("response", response)
+    //             userInfoDispatch({ type: 'UPDATE_FETCH', payload: response});
+    //             //sort the event by _id(as created time)
+    //             const totay = new Date();
+    //             setCurrentEvents(response.createdEvents.filter(item=>new Date(item.endTime) >= totay).sort((a, b) => {
+    //                 return b._id.localeCompare(a._id);
+    //             }));
+    //             setOldEvents(response.createdEvents.filter(item=>new Date(item.endTime) < totay).sort((a, b) => {
+    //                 return b._id.localeCompare(a._id);
+    //             }));
+    //         }
+    //         fetchUser();
+    //     }
+    // },[userInfo.isLogedin]);
     const handleClick=()=>{
         setShowOldEvents(prev=>!prev);
     };

@@ -16,7 +16,10 @@ export const InvitationItem = ({event})=>{
         }else{
             setStatusFlag("readed");
         }
-    },[event]);
+    },[event.status,event.isRead]);
+    useEffect(()=>{
+        console.log("invitation statusFlag", statusFlag)
+    },[statusFlag]);
     const EventStatus=()=>{
         if(statusFlag === "updated"){
             return (

@@ -2,6 +2,7 @@ import { useContext} from "react";
 import { UserContext } from "../utils/UserContext";
 
 export const EventContent = ({event})=>{
+    if(event === null) return;
     const {userInfo} = useContext(UserContext);
     let invitation = true;
     if(userInfo._id === event.createdBy){
@@ -9,7 +10,7 @@ export const EventContent = ({event})=>{
     }else{
         invitation = true;
     }
-    console.log("EventContent", event)
+    console.log("EventContent event", event)
     const startTime = new Date(event.startTime);
     const localStartTime = startTime.toLocaleString("de-DE", {
         year: "numeric",
@@ -72,7 +73,7 @@ export const EventContent = ({event})=>{
                     {"Gäste :"}
                 </p>
                 {
-                    event.gasts.map(gast=>(
+                    event?.gasts.map(gast=>(
                         <div key={gast._id} className="flex flex-row m-4">
                         <p className="text-[#2D4B73] mr-4">{gast.userName}</p>
                         <GuestDecition isJoinIn={gast.isJoinIn}/>

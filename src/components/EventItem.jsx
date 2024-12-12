@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { MessageContext } from "../utils/MessageContext";
 export const EventItem = ({event})=>{
     const [statusFlag,setStatusFlag] = useState("readed");
     const [canceled, setCanceled] = useState(false);
+    // const {setEventNewStatus} = useContext(MessageContext);
     useEffect(()=>{
         if(event.status === 1 && event.isRead === false){
             setStatusFlag("updated");
+            // setEventNewStatus(true);
         }else if(event.status === -1){
             setStatusFlag("canceled");
             setCanceled(true);
         }else{
             setStatusFlag("readed");
+            // setEventNewStatus(false);
         }
     },[event]);
     const EventStatus=()=>{
